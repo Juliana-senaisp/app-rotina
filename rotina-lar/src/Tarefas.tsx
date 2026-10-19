@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { View, Text, TextInput, Pressable, FlatList, StyleSheet } from 'react-native';
 import {
   collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc, query, orderBy,
@@ -7,6 +7,7 @@ import { db } from './firebase';
 import {
   prepararNotificacoes, agendarLembrete, cancelarLembrete, testarEm10Segundos,
 } from './notificacoes';
+import { useTema, type Tema } from './tema';
 
 type Unidade = 'dias' | 'semanas' | 'meses';
 type Tarefa = {
@@ -14,11 +15,12 @@ type Tarefa = {
   nome: string;
   intervalo: number;
   unidade: Unidade;
-  proxima: number; // data em milissegundos
+  proxima: number;
   notificacaoId?: string | null;
 };
 
-const HORA_DO_LEMBRETE = 8; // 8h da manhã
+const UNIDADES: Unidade[] = ['dias', 'semanas', 'meses'];
+const HORA_DO_LEMBRETE = 8;
 
 function proximaData(intervalo: number, unidade: Unidade) {
   const d = new Date();
@@ -29,7 +31,35 @@ function proximaData(intervalo: number, unidade: Unidade) {
   return d;
 }
 
-export default function TarefasScreen() {
+function rotuloUnidade(n: number, u: Unidade) {
+  if (n !== 1) return u;
+  return u === 'dias' ? 'dia' : u === 'semanas' ? 'semana' : 'mês';
+}
+
+function situacao(proxima: number) {
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+  const alvo = new Date(proxima);
+  alvo.setHours(0, 0, 0, 0);
+  const dias = Math.round((alvo.getTime() - hoje.getTime()) / 86400000);
+  if (dias < 0) {
+    return { texto: dias === -1 ? 'Atrasada há 1 dia' : `Atrasada há ${-dias} dias`, tipo: 'perigo' as const };
+  }
+  if (dias === 0) return { texto: 'Hoje', tipo: 'aviso' as const };
+  if (dias === 1) return { texto: 'Amanhã', tipo: 'aviso' as const };
+  return { texto: `Em ${dias} dias`, tipo: 'ok' as const };
+}
+
+function corDoSelo(c: Tema, tipo: 'perigo' | 'aviso' | 'ok') {
+  if (tipo === 'perigo') return { fundo: c.perigoSuave, texto: c.perigo };
+  if (tipo === 'aviso') return { fundo: c.avisoSuave, texto: c.aviso };
+  return { fundo: c.primariaSuave, texto: c.primaria };
+}
+
+export default function Tarefas() {
+  const c = useTema();
+  const s = useMemo(() => criarEstilos(c), [c]);
+
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
   const [nome, setNome] = useState('');
   const [intervalo, setIntervalo] = useState('1');
@@ -37,7 +67,6 @@ export default function TarefasScreen() {
 
   useEffect(() => {
     prepararNotificacoes();
-
     const q = query(collection(db, 'tarefas'), orderBy('proxima'));
     const cancelar = onSnapshot(
       q,
@@ -81,56 +110,70 @@ export default function TarefasScreen() {
     await deleteDoc(doc(db, 'tarefas', t.id));
   }
 
-  return (
-    <View style={s.container}>
+  const formulario = (
+    <View style={s.formulario}>
       <Text style={s.titulo}>Tarefas da casa</Text>
-
+      <Text style={s.rotulo}>Nova tarefa</Text>
       <TextInput
         style={s.input}
         placeholder="Ex: Trocar a roupa de cama"
+        placeholderTextColor={c.placeholder}
         value={nome}
         onChangeText={setNome}
       />
-
       <View style={s.linha}>
-        <Text>A cada</Text>
+        <Text style={s.texto}>A cada</Text>
         <TextInput
           style={[s.input, s.inputNumero]}
           keyboardType="numeric"
           value={intervalo}
           onChangeText={setIntervalo}
         />
-        {(['dias', 'semanas', 'meses'] as Unidade[]).map(u => (
+        {UNIDADES.map(u => (
           <Pressable
             key={u}
             onPress={() => setUnidade(u)}
             style={[s.chip, unidade === u && s.chipAtivo]}
           >
-            <Text style={unidade === u && s.chipTextoAtivo}>{u}</Text>
+            <Text style={[s.chipTexto, unidade === u && s.chipTextoAtivo]}>{u}</Text>
           </Pressable>
         ))}
       </View>
-
       <Pressable style={s.botao} onPress={adicionar}>
         <Text style={s.botaoTexto}>Adicionar tarefa</Text>
       </Pressable>
+    </View>
+  );
 
-      <Pressable style={s.botaoTeste} onPress={testarEm10Segundos}>
-        <Text style={s.botaoTesteTexto}>Testar notificação (10s)</Text>
-      </Pressable>
-
-      <FlatList
-        data={tarefas}
-        keyExtractor={t => t.id}
-        ListEmptyComponent={<Text style={s.vazio}>Nenhuma tarefa ainda.</Text>}
-        renderItem={({ item }) => (
+  return (
+    <FlatList
+      data={tarefas}
+      keyExtractor={t => t.id}
+      contentContainerStyle={s.lista}
+      keyboardShouldPersistTaps="handled"
+      ListHeaderComponent={formulario}
+      ListEmptyComponent={<Text style={s.vazio}>Nenhuma tarefa ainda.</Text>}
+      ListFooterComponent={
+        <Pressable onPress={testarEm10Segundos}>
+          <Text style={s.linkTeste}>Testar notificação (10s)</Text>
+        </Pressable>
+      }
+      renderItem={({ item }) => {
+        const sit = situacao(item.proxima);
+        const cor = corDoSelo(c, sit.tipo);
+        return (
           <View style={s.card}>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, gap: 4 }}>
               <Text style={s.cardNome}>{item.nome}</Text>
-              <Text>A cada {item.intervalo} {item.unidade}</Text>
-              <Text>Próxima: {new Date(item.proxima).toLocaleDateString('pt-BR')}</Text>
+              <Text style={s.suave}>
+                A cada {item.intervalo} {rotuloUnidade(item.intervalo, item.unidade)} · próxima{' '}
+                {new Date(item.proxima).toLocaleDateString('pt-BR')}
+              </Text>
+              <View style={[s.selo, { backgroundColor: cor.fundo }]}>
+                <Text style={[s.seloTexto, { color: cor.texto }]}>{sit.texto}</Text>
+              </View>
             </View>
-            <View style={{ gap: 6 }}>
+            <View style={{ gap: 8 }}>
               <Pressable style={s.feito} onPress={() => marcarFeita(item)}>
                 <Text style={s.botaoTexto}>Feito</Text>
               </Pressable>
@@ -139,29 +182,50 @@ export default function TarefasScreen() {
               </Pressable>
             </View>
           </View>
-        )}
-      />
-    </View>
+        );
+      }}
+    />
   );
 }
 
-const s = StyleSheet.create({
-  container: { flex: 1, padding: 20, paddingTop: 16, gap: 12 },
-  titulo: { fontSize: 24, fontWeight: 'bold' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10 },
-  inputNumero: { width: 60, textAlign: 'center' },
-  linha: { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
-  chip: { borderWidth: 1, borderColor: '#ccc', borderRadius: 16, paddingHorizontal: 12, paddingVertical: 6 },
-  chipAtivo: { backgroundColor: '#2e7d32', borderColor: '#2e7d32' },
-  chipTextoAtivo: { color: '#fff' },
-  botao: { backgroundColor: '#2e7d32', padding: 12, borderRadius: 8, alignItems: 'center' },
-  botaoTexto: { color: '#fff', fontWeight: '600', textAlign: 'center' },
-  botaoTeste: { borderWidth: 1, borderColor: '#2e7d32', padding: 10, borderRadius: 8, alignItems: 'center' },
-  botaoTesteTexto: { color: '#2e7d32', fontWeight: '600' },
-  vazio: { textAlign: 'center', color: '#888', marginTop: 20 },
-  card: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#ddd', borderRadius: 10, padding: 12, marginTop: 10 },
-  cardNome: { fontWeight: 'bold', fontSize: 16 },
-  feito: { backgroundColor: '#2e7d32', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8 },
-  excluir: { borderWidth: 1, borderColor: '#c62828', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8 },
-  excluirTexto: { color: '#c62828', fontWeight: '600', textAlign: 'center' },
-});
+function criarEstilos(c: Tema) {
+  return StyleSheet.create({
+    lista: { padding: 20, paddingBottom: 48, gap: 12 },
+    formulario: {
+      backgroundColor: c.cartao, borderWidth: 1, borderColor: c.borda,
+      borderRadius: 16, padding: 16, gap: 12, marginBottom: 4,
+    },
+    titulo: { fontSize: 22, fontWeight: '700', color: c.texto },
+    rotulo: { fontWeight: '600', color: c.textoSuave },
+    texto: { color: c.texto },
+    suave: { color: c.textoSuave },
+    input: {
+      borderWidth: 1, borderColor: c.borda, backgroundColor: c.input,
+      color: c.texto, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10,
+    },
+    inputNumero: { width: 60, textAlign: 'center' },
+    linha: { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
+    chip: {
+      borderWidth: 1, borderColor: c.borda, borderRadius: 20,
+      paddingHorizontal: 14, paddingVertical: 7, backgroundColor: c.input,
+    },
+    chipAtivo: { backgroundColor: c.primaria, borderColor: c.primaria },
+    chipTexto: { color: c.texto },
+    chipTextoAtivo: { color: c.textoPrimaria, fontWeight: '600' },
+    botao: { backgroundColor: c.primaria, padding: 13, borderRadius: 10, alignItems: 'center' },
+    botaoTexto: { color: c.textoPrimaria, fontWeight: '700', textAlign: 'center' },
+    vazio: { textAlign: 'center', color: c.textoSuave, marginTop: 24 },
+    card: {
+      flexDirection: 'row', alignItems: 'center', gap: 12,
+      backgroundColor: c.cartao, borderWidth: 1, borderColor: c.borda,
+      borderRadius: 16, padding: 14,
+    },
+    cardNome: { fontWeight: '700', fontSize: 16, color: c.texto },
+    selo: { alignSelf: 'flex-start', borderRadius: 12, paddingHorizontal: 10, paddingVertical: 3, marginTop: 2 },
+    seloTexto: { fontSize: 12, fontWeight: '700' },
+    feito: { backgroundColor: c.primaria, paddingHorizontal: 16, paddingVertical: 9, borderRadius: 10 },
+    excluir: { borderWidth: 1, borderColor: c.perigo, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10 },
+    excluirTexto: { color: c.perigo, fontWeight: '600', textAlign: 'center' },
+    linkTeste: { color: c.textoSuave, textAlign: 'center', textDecorationLine: 'underline', marginTop: 16 },
+  });
+}

@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, StyleSheet } from 'react-native';
 import {
   collection, addDoc, onSnapshot, deleteDoc, doc, query, where,
 } from 'firebase/firestore';
 import { db } from './firebase';
+import { useTema, type Tema } from './tema';
 
 type Refeicao = 'Café' | 'Almoço' | 'Lanche' | 'Jantar';
 const REFEICOES: Refeicao[] = ['Café', 'Almoço', 'Lanche', 'Jantar'];
@@ -31,6 +32,9 @@ function somarDias(d: Date, n: number) {
 }
 
 export default function Cardapio() {
+  const c = useTema();
+  const s = useMemo(() => criarEstilos(c), [c]);
+
   const [inicio, setInicio] = useState(segundaDaSemana(new Date()));
   const [itens, setItens] = useState<Item[]>([]);
   const [pratos, setPratos] = useState<Prato[]>([]);
@@ -42,7 +46,6 @@ export default function Cardapio() {
   const dias = Array.from({ length: 7 }, (_, i) => somarDias(inicio, i));
   const hoje = chave(new Date());
 
-  // Cardápio da semana exibida
   useEffect(() => {
     const q = query(
       collection(db, 'cardapio'),
@@ -61,7 +64,6 @@ export default function Cardapio() {
     return cancelar;
   }, [inicio]);
 
-  // Lista de pratos salvos
   useEffect(() => {
     const cancelar = onSnapshot(
       collection(db, 'pratos'),
@@ -126,82 +128,85 @@ export default function Cardapio() {
 
       <View style={s.linha}>
         <Pressable style={s.nav} onPress={() => setInicio(somarDias(inicio, -7))}>
-          <Text>‹ Anterior</Text>
+          <Text style={s.texto}>‹ Anterior</Text>
         </Pressable>
         <Pressable
           style={s.nav}
           onPress={() => { setInicio(segundaDaSemana(new Date())); setDiaSel(0); }}
         >
-          <Text>Hoje</Text>
+          <Text style={s.texto}>Hoje</Text>
         </Pressable>
         <Pressable style={s.nav} onPress={() => setInicio(somarDias(inicio, 7))}>
-          <Text>Próxima ›</Text>
+          <Text style={s.texto}>Próxima ›</Text>
         </Pressable>
       </View>
 
-      <Text style={s.rotulo}>Dia</Text>
-      <View style={s.linha}>
-        {dias.map((d, i) => (
-          <Pressable
-            key={i}
-            onPress={() => setDiaSel(i)}
-            style={[s.chip, diaSel === i && s.chipAtivo]}
-          >
-            <Text style={diaSel === i && s.chipTextoAtivo}>{nomeDia(d)}</Text>
-          </Pressable>
-        ))}
-      </View>
+      <View style={s.painel}>
+        <Text style={s.rotulo}>Dia</Text>
+        <View style={s.linha}>
+          {dias.map((d, i) => (
+            <Pressable
+              key={i}
+              onPress={() => setDiaSel(i)}
+              style={[s.chip, diaSel === i && s.chipAtivo]}
+            >
+              <Text style={[s.chipTexto, diaSel === i && s.chipTextoAtivo]}>{nomeDia(d)}</Text>
+            </Pressable>
+          ))}
+        </View>
 
-      <Text style={s.rotulo}>Refeição</Text>
-      <View style={s.linha}>
-        {REFEICOES.map(r => (
-          <Pressable
-            key={r}
-            onPress={() => setRefeicao(r)}
-            style={[s.chip, refeicao === r && s.chipAtivo]}
-          >
-            <Text style={refeicao === r && s.chipTextoAtivo}>{r}</Text>
-          </Pressable>
-        ))}
-      </View>
+        <Text style={s.rotulo}>Refeição</Text>
+        <View style={s.linha}>
+          {REFEICOES.map(r => (
+            <Pressable
+              key={r}
+              onPress={() => setRefeicao(r)}
+              style={[s.chip, refeicao === r && s.chipAtivo]}
+            >
+              <Text style={[s.chipTexto, refeicao === r && s.chipTextoAtivo]}>{r}</Text>
+            </Pressable>
+          ))}
+        </View>
 
-      <View style={s.cabecalhoLista}>
-        <Text style={s.rotulo}>Pratos salvos ({refeicao})</Text>
-        <Pressable onPress={() => setEditando(!editando)}>
-          <Text style={s.link}>{editando ? 'Concluir' : 'Editar lista'}</Text>
-        </Pressable>
-      </View>
-      <View style={s.linha}>
-        {pratosDaRefeicao.length === 0 && (
-          <Text style={s.vazio}>
-            Nenhum prato salvo para esta refeição. Escreva abaixo e ele será salvo automaticamente.
-          </Text>
-        )}
-        {pratosDaRefeicao.map(p => (
-          <Pressable
-            key={p.id}
-            onPress={() => (editando ? excluirPrato(p.id) : adicionarAoCardapio(p.nome))}
-            style={[s.chipPrato, editando && s.chipPratoEditando]}
-          >
-            <Text style={editando ? s.chipPratoTextoEditando : s.chipPratoTexto}>
-              {editando ? '✕ ' : '+ '}{p.nome}
+        <View style={s.cabecalhoLista}>
+          <Text style={s.rotulo}>Pratos salvos ({refeicao})</Text>
+          <Pressable onPress={() => setEditando(!editando)}>
+            <Text style={s.link}>{editando ? 'Concluir' : 'Editar lista'}</Text>
+          </Pressable>
+        </View>
+        <View style={s.linha}>
+          {pratosDaRefeicao.length === 0 && (
+            <Text style={s.suave}>
+              Nenhum prato salvo para esta refeição. Escreva abaixo e ele será salvo automaticamente.
             </Text>
-          </Pressable>
-        ))}
-      </View>
+          )}
+          {pratosDaRefeicao.map(p => (
+            <Pressable
+              key={p.id}
+              onPress={() => (editando ? excluirPrato(p.id) : adicionarAoCardapio(p.nome))}
+              style={[s.chipPrato, editando && s.chipPratoEditando]}
+            >
+              <Text style={editando ? s.chipPratoTextoEditando : s.chipPratoTexto}>
+                {editando ? '✕ ' : '+ '}{p.nome}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
 
-      <TextInput
-        style={s.input}
-        placeholder="Novo prato (ex: Arroz, feijão e frango grelhado)"
-        value={prato}
-        onChangeText={setPrato}
-      />
-      <Pressable style={s.botao} onPress={adicionarDigitado}>
-        <Text style={s.botaoTexto}>Adicionar ao cardápio</Text>
-      </Pressable>
-      <Pressable style={s.botaoSecundario} onPress={soSalvar}>
-        <Text style={s.botaoSecundarioTexto}>Só salvar na lista</Text>
-      </Pressable>
+        <TextInput
+          style={s.input}
+          placeholder="Novo prato (ex: Arroz, feijão e frango grelhado)"
+          placeholderTextColor={c.placeholder}
+          value={prato}
+          onChangeText={setPrato}
+        />
+        <Pressable style={s.botao} onPress={adicionarDigitado}>
+          <Text style={s.botaoTexto}>Adicionar ao cardápio</Text>
+        </Pressable>
+        <Pressable style={s.botaoSecundario} onPress={soSalvar}>
+          <Text style={s.botaoSecundarioTexto}>Só salvar na lista</Text>
+        </Pressable>
+      </View>
 
       {dias.map((d, i) => {
         const doDia = itens
@@ -210,14 +215,14 @@ export default function Cardapio() {
         return (
           <View key={i} style={[s.card, chave(d) === hoje && s.cardHoje]}>
             <Text style={s.cardTitulo}>{nomeDia(d)}</Text>
-            {doDia.length === 0 && <Text style={s.vazio}>Sem refeições cadastradas</Text>}
+            {doDia.length === 0 && <Text style={s.suave}>Sem refeições cadastradas</Text>}
             {doDia.map(it => (
               <View key={it.id} style={s.item}>
-                <Text style={{ flex: 1 }}>
+                <Text style={s.itemTexto}>
                   <Text style={s.negrito}>{it.refeicao}: </Text>
                   {it.prato}
                 </Text>
-                <Pressable onPress={() => excluirItem(it.id)}>
+                <Pressable onPress={() => excluirItem(it.id)} hitSlop={8}>
                   <Text style={s.x}>✕</Text>
                 </Pressable>
               </View>
@@ -229,31 +234,55 @@ export default function Cardapio() {
   );
 }
 
-const s = StyleSheet.create({
-  container: { padding: 20, paddingTop: 16, gap: 12 },
-  titulo: { fontSize: 24, fontWeight: 'bold' },
-  rotulo: { fontWeight: '600' },
-  linha: { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
-  cabecalhoLista: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  link: { color: '#2e7d32', fontWeight: '600' },
-  nav: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 8 },
-  chip: { borderWidth: 1, borderColor: '#ccc', borderRadius: 16, paddingHorizontal: 12, paddingVertical: 6 },
-  chipAtivo: { backgroundColor: '#2e7d32', borderColor: '#2e7d32' },
-  chipTextoAtivo: { color: '#fff' },
-  chipPrato: { borderWidth: 1, borderColor: '#2e7d32', borderRadius: 16, paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#e8f5e9' },
-  chipPratoTexto: { color: '#2e7d32', fontWeight: '600' },
-  chipPratoEditando: { borderColor: '#c62828', backgroundColor: '#ffebee' },
-  chipPratoTextoEditando: { color: '#c62828', fontWeight: '600' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10 },
-  botao: { backgroundColor: '#2e7d32', padding: 12, borderRadius: 8, alignItems: 'center' },
-  botaoTexto: { color: '#fff', fontWeight: '600' },
-  botaoSecundario: { borderWidth: 1, borderColor: '#2e7d32', padding: 10, borderRadius: 8, alignItems: 'center' },
-  botaoSecundarioTexto: { color: '#2e7d32', fontWeight: '600' },
-  card: { borderWidth: 1, borderColor: '#ddd', borderRadius: 10, padding: 12, gap: 6 },
-  cardHoje: { borderColor: '#2e7d32', borderWidth: 2 },
-  cardTitulo: { fontWeight: 'bold', fontSize: 16, textTransform: 'capitalize' },
-  vazio: { color: '#888' },
-  item: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  negrito: { fontWeight: '600' },
-  x: { color: '#c62828', fontSize: 16, paddingHorizontal: 6 },
-});
+function criarEstilos(c: Tema) {
+  return StyleSheet.create({
+    container: { padding: 20, paddingBottom: 48, gap: 12 },
+    titulo: { fontSize: 22, fontWeight: '700', color: c.texto },
+    texto: { color: c.texto },
+    suave: { color: c.textoSuave },
+    rotulo: { fontWeight: '600', color: c.textoSuave },
+    linha: { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
+    painel: {
+      backgroundColor: c.cartao, borderWidth: 1, borderColor: c.borda,
+      borderRadius: 16, padding: 16, gap: 12,
+    },
+    cabecalhoLista: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    link: { color: c.primaria, fontWeight: '700' },
+    nav: {
+      borderWidth: 1, borderColor: c.borda, backgroundColor: c.cartao,
+      borderRadius: 10, paddingHorizontal: 14, paddingVertical: 9,
+    },
+    chip: {
+      borderWidth: 1, borderColor: c.borda, borderRadius: 20,
+      paddingHorizontal: 14, paddingVertical: 7, backgroundColor: c.input,
+    },
+    chipAtivo: { backgroundColor: c.primaria, borderColor: c.primaria },
+    chipTexto: { color: c.texto },
+    chipTextoAtivo: { color: c.textoPrimaria, fontWeight: '600' },
+    chipPrato: {
+      borderWidth: 1, borderColor: c.primaria, borderRadius: 20,
+      paddingHorizontal: 14, paddingVertical: 7, backgroundColor: c.primariaSuave,
+    },
+    chipPratoTexto: { color: c.primaria, fontWeight: '600' },
+    chipPratoEditando: { borderColor: c.perigo, backgroundColor: c.perigoSuave },
+    chipPratoTextoEditando: { color: c.perigo, fontWeight: '600' },
+    input: {
+      borderWidth: 1, borderColor: c.borda, backgroundColor: c.input,
+      color: c.texto, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10,
+    },
+    botao: { backgroundColor: c.primaria, padding: 13, borderRadius: 10, alignItems: 'center' },
+    botaoTexto: { color: c.textoPrimaria, fontWeight: '700' },
+    botaoSecundario: { borderWidth: 1, borderColor: c.primaria, padding: 11, borderRadius: 10, alignItems: 'center' },
+    botaoSecundarioTexto: { color: c.primaria, fontWeight: '600' },
+    card: {
+      backgroundColor: c.cartao, borderWidth: 1, borderColor: c.borda,
+      borderRadius: 16, padding: 14, gap: 6,
+    },
+    cardHoje: { borderColor: c.primaria, borderWidth: 2 },
+    cardTitulo: { fontWeight: '700', fontSize: 16, color: c.texto, textTransform: 'capitalize' },
+    item: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    itemTexto: { flex: 1, color: c.texto },
+    negrito: { fontWeight: '700' },
+    x: { color: c.perigo, fontSize: 16, paddingHorizontal: 6 },
+  });
+}
