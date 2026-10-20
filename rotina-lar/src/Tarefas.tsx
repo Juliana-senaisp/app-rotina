@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, TextInput, Pressable, FlatList, StyleSheet } from 'react-native';
 import {
   collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc, query, orderBy,
-} from 'firebase/firestone';
+} from 'firebase/firestore';
 import { db } from './firebase';
 import {
   prepararNotificacoes, agendarLembrete, cancelarLembrete, testarEm10Segundos,
@@ -19,6 +19,7 @@ type Tarefa = {
   notificacaoId?: string | null;
   feitaEm?: number | null;
 };
+type Mensagem = { texto: string; tipo: 'ok' | 'erro' };
 
 const UNIDADES: Unidade[] = ['dias', 'semanas', 'meses'];
 const HORA_DO_LEMBRETE = 8;
@@ -27,7 +28,13 @@ function proximaData(intervalo: number, unidade: Unidade) {
   const d = new Date();
   if (unidade === 'dias') d.setDate(d.getDate() + intervalo);
   if (unidade === 'semanas') d.setDate(d.getDate() + intervalo * 7);
-  if (unidade === 'meses') d.setMonth(d.getMonth() + intervalo);
+  if (unidade === 'meses') {
+    const dia = d.getDate();
+    d.setDate(1);
+    d.setMonth(d.getMonth() + intervalo);
+    const ultimoDia = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    d.setDate(Math.min(dia, ultimoDia));
+  }
   d.setHours(HORA_DO_LEMBRETE, 0, 0, 0);
   return d;
 }
@@ -44,7 +51,10 @@ function situacao(proxima: number) {
   alvo.setHours(0, 0, 0, 0);
   const dias = Math.round((alvo.getTime() - hoje.getTime()) / 86400000);
   if (dias < 0) {
-    return { texto: dias === -1 ? 'Atrasada há 1 dia' : `Atrasada há ${-dias} dias`, tipo: 'perigo' as const };
+    return {
+      texto: dias === -1 ? 'Atrasada há 1 dia' : `Atrasada há ${-dias} dias`,
+      tipo: 'perigo' as const,
+    };
   }
   if (dias === 0) return { texto: 'Hoje', tipo: 'aviso' as const };
   if (dias === 1) return { texto: 'Amanhã', tipo: 'aviso' as const };
@@ -57,18 +67,42 @@ function corDoSelo(c: Tema, tipo: 'perigo' | 'aviso' | 'ok') {
   return { fundo: c.primariaSuave, texto: c.primaria };
 }
 
+// Cancela o lembrete antigo (se houver) e agenda o novo.
+// Se falhar, não interrompe: devolve ok = false.
+async function reagendar(nome: string, data: Date, idAntigo?: string | null) {
+  try {
+    await cancelarLembrete(idAntigo);
+    const id = await agendarLembrete(nome, data);
+    return { id, ok: true };
+  } catch (erro) {
+    console.error('Erro no lembrete:', erro);
+    return { id: null, ok: false };
+  }
+}
+
 export default function Tarefas() {
   const c = useTema();
   const s = useMemo(() => criarEstilos(c), [c]);
 
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
-  const [mensagem, setMensagem] = useState('');
+  const [mensagem, setMensagem] = useState<Mensagem | null>(null);
   const [nome, setNome] = useState('');
   const [intervalo, setIntervalo] = useState('1');
   const [unidade, setUnidade] = useState<Unidade>('semanas');
+  const [ocupadoId, setOcupadoId] = useState<string | null>(null);
+  const [confirmandoId, setConfirmandoId] = useState<string | null>(null);
+
+  const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function mostrarMensagem(texto: string, tipo: 'ok' | 'erro' = 'ok') {
+    if (temporizador.current) clearTimeout(temporizador.current);
+    setMensagem({ texto, tipo });
+    temporizador.current = setTimeout(() => setMensagem(null), 6000);
+  }
 
   useEffect(() => {
-    prepararNotificacoes();
+    prepararNotificacoes().catch(e => console.error('Notificações:', e));
+
     const q = query(collection(db, 'tarefas'), orderBy('proxima'));
     const cancelar = onSnapshot(
       q,
@@ -77,63 +111,100 @@ export default function Tarefas() {
           snap.docs.map(d => ({ id: d.id, ...(d.data() as Omit<Tarefa, 'id'>) }))
         );
       },
-      erro => console.error('Erro ao ler tarefas:', erro)
+      erro => {
+        console.error('Erro ao ler tarefas:', erro);
+        mostrarMensagem(`Não foi possível carregar as tarefas: ${erro.message}`, 'erro');
+      }
     );
-    return cancelar;
+
+    return () => {
+      cancelar();
+      if (temporizador.current) clearTimeout(temporizador.current);
+    };
   }, []);
 
   async function adicionar() {
+    const nomeLimpo = nome.trim();
     const n = parseInt(intervalo, 10);
-    if (!nome.trim() || !n || n < 1) return;
-    const data = proximaData(n, unidade);
-    const notificacaoId = await agendarLembrete(nome.trim(), data);
-    await addDoc(collection(db, 'tarefas'), {
-      nome: nome.trim(),
-      intervalo: n,
-      unidade,
-      proxima: data.getTime(),
-      notificacaoId,
-    });
-    setNome('');
-  }
-  async function marcarFeita(t: Tarefa) {
-    const data = proximaData(t.intervalo, t.unidade);
-    let notificacaoId: string | null = null;
-    let lembreteOk = true;
 
-    try {
-      await cancelarLembrete(t.notificacaoId);
-      notificacaoId = await agendarLembrete(t.nome, data);
-    } catch (erro) {
-      console.error('Erro no lembrete:', erro);
-      lembreteOk = false;
+    if (!nomeLimpo) {
+      mostrarMensagem('Digite o nome da tarefa.', 'erro');
+      return;
+    }
+    if (!n || n < 1) {
+      mostrarMensagem('Informe um intervalo de 1 ou mais.', 'erro');
+      return;
     }
 
     try {
+      const data = proximaData(n, unidade);
+      const lembrete = await reagendar(nomeLimpo, data);
+      await addDoc(collection(db, 'tarefas'), {
+        nome: nomeLimpo,
+        intervalo: n,
+        unidade,
+        proxima: data.getTime(),
+        notificacaoId: lembrete.id,
+        feitaEm: null,
+      });
+      setNome('');
+      mostrarMensagem(
+        `Tarefa adicionada. Próxima em ${data.toLocaleDateString('pt-BR')}.` +
+          (lembrete.ok ? '' : ' (O lembrete não pôde ser agendado.)')
+      );
+    } catch (erro: any) {
+      console.error('Erro ao adicionar:', erro);
+      mostrarMensagem(`Não foi possível adicionar: ${erro?.message ?? erro}`, 'erro');
+    }
+  }
+
+  async function marcarFeita(t: Tarefa) {
+    if (ocupadoId) return;
+    setOcupadoId(t.id);
+    try {
+      const data = proximaData(t.intervalo, t.unidade);
+      const lembrete = await reagendar(t.nome, data, t.notificacaoId);
       await updateDoc(doc(db, 'tarefas', t.id), {
         proxima: data.getTime(),
-        notificacaoId,
+        notificacaoId: lembrete.id,
         feitaEm: Date.now(),
       });
-      setMensagem(
+      mostrarMensagem(
         `Feito! "${t.nome}" – próxima em ${data.toLocaleDateString('pt-BR')}.` +
-        (lembreteOk ? '' : ' (O lembrete não pôde ser agendado.)')
+          (lembrete.ok ? '' : ' (O lembrete não pôde ser agendado.)')
       );
     } catch (erro: any) {
       console.error('Erro ao marcar como feita:', erro);
-      setMensagem(`Não foi possível marcar como feita: ${erro?.message ?? erro}`);
+      mostrarMensagem(`Não foi possível marcar como feita: ${erro?.message ?? erro}`, 'erro');
+    } finally {
+      setOcupadoId(null);
     }
-    setTimeout(() => setMensagem(''), 6000);
   }
 
   async function excluir(t: Tarefa) {
-    await cancelarLembrete(t.notificacaoId);
-    await deleteDoc(doc(db, 'tarefas', t.id));
+    // Primeiro toque pede confirmação; segundo toque exclui.
+    if (confirmandoId !== t.id) {
+      setConfirmandoId(t.id);
+      setTimeout(() => setConfirmandoId(atual => (atual === t.id ? null : atual)), 4000);
+      return;
+    }
+    setConfirmandoId(null);
+    try {
+      try {
+        await cancelarLembrete(t.notificacaoId);
+      } catch (erro) {
+        console.error('Erro ao cancelar lembrete:', erro);
+      }
+      await deleteDoc(doc(db, 'tarefas', t.id));
+      mostrarMensagem(`Tarefa "${t.nome}" excluída.`);
+    } catch (erro: any) {
+      console.error('Erro ao excluir:', erro);
+      mostrarMensagem(`Não foi possível excluir: ${erro?.message ?? erro}`, 'erro');
+    }
   }
 
   const formulario = (
     <View style={s.formulario}>
-      {mensagem ? <Text style={s.banner}>{mensagem}</Text> : null}
       <Text style={s.titulo}>Tarefas da casa</Text>
       <Text style={s.rotulo}>Nova tarefa</Text>
       <TextInput
@@ -148,6 +219,7 @@ export default function Tarefas() {
         <TextInput
           style={[s.input, s.inputNumero]}
           keyboardType="numeric"
+          maxLength={3}
           value={intervalo}
           onChangeText={setIntervalo}
         />
@@ -168,57 +240,89 @@ export default function Tarefas() {
   );
 
   return (
-    <FlatList
-      data={tarefas}
-      keyExtractor={t => t.id}
-      contentContainerStyle={s.lista}
-      keyboardShouldPersistTaps="handled"
-      ListHeaderComponent={formulario}
-      ListEmptyComponent={<Text style={s.vazio}>Nenhuma tarefa ainda.</Text>}
-      ListFooterComponent={
-        <Pressable onPress={testarEm10Segundos}>
-          <Text style={s.linkTeste}>Testar notificação (10s)</Text>
-        </Pressable>
-      }
-      renderItem={({ item }) => {
-        const feitaHoje = item.feitaEm
-          ? new Date(item.feitaEm).toDateString() === new Date().toDateString()
-          : false;
-        const sit = feitaHoje
-          ? { texto: 'Feito hoje ✓', tipo: 'ok' as const }
-          : situacao(item.proxima);
-        const cor = corDoSelo(c, sit.tipo);
-        return (
-          <View style={s.card}>
-            <View style={{ flex: 1, gap: 4 }}>
-              <Text style={s.cardNome}>{item.nome}</Text>
-              <Text style={s.suave}>
-                A cada {item.intervalo} {rotuloUnidade(item.intervalo, item.unidade)} · próxima{' '}
-                Última vez: {new Date(item.feitaEm).toLocaleDateString('pt-BR')}
-                {new Date(item.proxima).toLocaleDateString('pt-BR')}
-              </Text>
-              <View style={[s.selo, { backgroundColor: cor.fundo }]}>
-                <Text style={[s.seloTexto, { color: cor.texto }]}>{sit.texto}</Text>
+    <View style={s.tela}>
+      {mensagem ? (
+        <Text style={[s.banner, mensagem.tipo === 'erro' ? s.bannerErro : s.bannerOk]}>
+          {mensagem.texto}
+        </Text>
+      ) : null}
+
+      <FlatList
+        data={tarefas}
+        keyExtractor={t => t.id}
+        contentContainerStyle={s.lista}
+        keyboardShouldPersistTaps="handled"
+        ListHeaderComponent={formulario}
+        ListEmptyComponent={<Text style={s.vazio}>Nenhuma tarefa ainda.</Text>}
+        ListFooterComponent={
+          <Pressable onPress={testarEm10Segundos}>
+            <Text style={s.linkTeste}>Testar notificação (10s)</Text>
+          </Pressable>
+        }
+        renderItem={({ item }) => {
+          const feitaHoje = item.feitaEm
+            ? new Date(item.feitaEm).toDateString() === new Date().toDateString()
+            : false;
+          const sit = feitaHoje
+            ? { texto: 'Feito hoje ✓', tipo: 'ok' as const }
+            : situacao(item.proxima);
+          const cor = corDoSelo(c, sit.tipo);
+          const ocupado = ocupadoId === item.id;
+          const confirmando = confirmandoId === item.id;
+
+          return (
+            <View style={s.card}>
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text style={s.cardNome}>{item.nome}</Text>
+                <Text style={s.suave}>
+                  A cada {item.intervalo} {rotuloUnidade(item.intervalo, item.unidade)} · próxima{' '}
+                  {new Date(item.proxima).toLocaleDateString('pt-BR')}
+                </Text>
+                {item.feitaEm ? (
+                  <Text style={s.suave}>
+                    Última vez: {new Date(item.feitaEm).toLocaleDateString('pt-BR')}
+                  </Text>
+                ) : null}
+                <View style={[s.selo, { backgroundColor: cor.fundo }]}>
+                  <Text style={[s.seloTexto, { color: cor.texto }]}>{sit.texto}</Text>
+                </View>
+              </View>
+
+              <View style={{ gap: 8 }}>
+                <Pressable
+                  style={[s.feito, ocupado && s.desabilitado]}
+                  disabled={ocupado}
+                  onPress={() => marcarFeita(item)}
+                >
+                  <Text style={s.botaoTexto}>{ocupado ? '...' : 'Feito'}</Text>
+                </Pressable>
+                <Pressable
+                  style={[s.excluir, confirmando && s.excluirConfirmar]}
+                  onPress={() => excluir(item)}
+                >
+                  <Text style={confirmando ? s.excluirTextoConfirmar : s.excluirTexto}>
+                    {confirmando ? 'Confirmar?' : 'Excluir'}
+                  </Text>
+                </Pressable>
               </View>
             </View>
-            <View style={{ gap: 8 }}>
-              <Pressable style={s.feito} onPress={() => marcarFeita(item)}>
-                <Text style={s.botaoTexto}>Feito</Text>
-              </Pressable>
-              <Pressable style={s.excluir} onPress={() => excluir(item)}>
-                <Text style={s.excluirTexto}>Excluir</Text>
-              </Pressable>
-            </View>
-          </View>
-        );
-      }}
-    />
+          );
+        }}
+      />
+    </View>
   );
 }
 
 function criarEstilos(c: Tema) {
   return StyleSheet.create({
+    tela: { flex: 1 },
     lista: { padding: 20, paddingBottom: 48, gap: 12 },
+    banner: {
+      marginHorizontal: 20, marginBottom: 4, padding: 10,
+      borderRadius: 10, fontWeight: '600', overflow: 'hidden',
+    },
+    bannerOk: { backgroundColor: c.primariaSuave, color: c.primaria },
+    bannerErro: { backgroundColor: c.perigoSuave, color: c.perigo },
     formulario: {
       backgroundColor: c.cartao, borderWidth: 1, borderColor: c.borda,
       borderRadius: 16, padding: 16, gap: 12, marginBottom: 4,
@@ -249,15 +353,23 @@ function criarEstilos(c: Tema) {
       borderRadius: 16, padding: 14,
     },
     cardNome: { fontWeight: '700', fontSize: 16, color: c.texto },
-    selo: { alignSelf: 'flex-start', borderRadius: 12, paddingHorizontal: 10, paddingVertical: 3, marginTop: 2 },
+    selo: {
+      alignSelf: 'flex-start', borderRadius: 12,
+      paddingHorizontal: 10, paddingVertical: 3, marginTop: 2,
+    },
     seloTexto: { fontSize: 12, fontWeight: '700' },
     feito: { backgroundColor: c.primaria, paddingHorizontal: 16, paddingVertical: 9, borderRadius: 10 },
-    excluir: { borderWidth: 1, borderColor: c.perigo, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10 },
+    desabilitado: { opacity: 0.5 },
+    excluir: {
+      borderWidth: 1, borderColor: c.perigo,
+      paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10,
+    },
+    excluirConfirmar: { backgroundColor: c.perigo },
     excluirTexto: { color: c.perigo, fontWeight: '600', textAlign: 'center' },
-    linkTeste: { color: c.textoSuave, textAlign: 'center', textDecorationLine: 'underline', marginTop: 16 },
-    banner: {
-  backgroundColor: c.primariaSuave, color: c.primaria, fontWeight: '600',
-  borderRadius: 10, padding: 10, overflow: 'hidden',
-},
+    excluirTextoConfirmar: { color: '#FFFFFF', fontWeight: '700', textAlign: 'center' },
+    linkTeste: {
+      color: c.textoSuave, textAlign: 'center',
+      textDecorationLine: 'underline', marginTop: 16,
+    },
   });
 }
