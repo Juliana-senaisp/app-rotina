@@ -1,0 +1,7 @@
+- ter uma tela inicial com um resumo tipo, tarefas de hoje, cardapio e hoje e compromissos de hoje
+- os ícones de baixo ficaram  feios, quero algum mais bonito
+- placeholders mais genericos 
+- sobre o cardapio, que eu também possa escolher o dia clicando na lista de visualização abaixo além de só na lista das datas em cima
+- no calendario, quero além desses lembretes anteriore que já estão bem legais, quero que lembre no dia também
+- ainda sobre o calendario, quero que de para escolher a frenquencia com que vou ser lembrado, mensalmente, semanalmente ou anualmente ou em um intervalo que eu escolha, ou simplismente, sem intervalo, apenas um evento naquele dia
+- sobre o botão do feito, achei legal que ficou a mensagem de "feito hoje", mas vamos pensar em trocar a cor do botão feito quando a atividade naquele dia já tiver sido concluida
