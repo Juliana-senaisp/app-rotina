@@ -253,7 +253,7 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
         <Text style={s.rotulo}>Novo neste dia</Text>
         <TextInput
           style={s.input}
-          placeholder="Ex: Aniversário da Ana"
+          placeholder="Título do evento"
           placeholderTextColor={c.placeholder}
           value={titulo}
           onChangeText={setTitulo}
@@ -274,7 +274,7 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
         {tipo !== 'Aniversário' && (
           <TextInput
             style={s.input}
-            placeholder="Horário (opcional), ex: 14:30"
+            placeholder="Horário (opcional)"
             placeholderTextColor={c.placeholder}
             value={hora}
             maxLength={5}

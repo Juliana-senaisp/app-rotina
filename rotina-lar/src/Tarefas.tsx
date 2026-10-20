@@ -1,65 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, TextInput, Pressable, FlatList, StyleSheet } from 'react-native';
-import {
-  collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc, query, orderBy,
-} from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
 import { db } from './firebase';
+import { cancelarLembrete, testarEm10Segundos } from './notificacoes';
 import {
-  prepararNotificacoes, agendarLembrete, cancelarLembrete, testarEm10Segundos,
-} from './notificacoes';
+  UNIDADES, proximaData, hojeAsOito, rotuloUnidade, situacao, foiFeitaHoje,
+  reagendar, marcarTarefaFeita, type Tarefa, type Unidade,
+} from './tarefasLogica';
 import { useTema, type Tema } from './tema';
 
-type Unidade = 'dias' | 'semanas' | 'meses';
-type Tarefa = {
-  id: string;
-  nome: string;
-  intervalo: number;
-  unidade: Unidade;
-  proxima: number;
-  notificacaoId?: string | null;
-  feitaEm?: number | null;
-};
 type Mensagem = { texto: string; tipo: 'ok' | 'erro' };
-
-const UNIDADES: Unidade[] = ['dias', 'semanas', 'meses'];
-const HORA_DO_LEMBRETE = 8;
-
-function proximaData(intervalo: number, unidade: Unidade) {
-  const d = new Date();
-  if (unidade === 'dias') d.setDate(d.getDate() + intervalo);
-  if (unidade === 'semanas') d.setDate(d.getDate() + intervalo * 7);
-  if (unidade === 'meses') {
-    const dia = d.getDate();
-    d.setDate(1);
-    d.setMonth(d.getMonth() + intervalo);
-    const ultimoDia = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
-    d.setDate(Math.min(dia, ultimoDia));
-  }
-  d.setHours(HORA_DO_LEMBRETE, 0, 0, 0);
-  return d;
-}
-
-function rotuloUnidade(n: number, u: Unidade) {
-  if (n !== 1) return u;
-  return u === 'dias' ? 'dia' : u === 'semanas' ? 'semana' : 'mês';
-}
-
-function situacao(proxima: number) {
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
-  const alvo = new Date(proxima);
-  alvo.setHours(0, 0, 0, 0);
-  const dias = Math.round((alvo.getTime() - hoje.getTime()) / 86400000);
-  if (dias < 0) {
-    return {
-      texto: dias === -1 ? 'Atrasada há 1 dia' : `Atrasada há ${-dias} dias`,
-      tipo: 'perigo' as const,
-    };
-  }
-  if (dias === 0) return { texto: 'Hoje', tipo: 'aviso' as const };
-  if (dias === 1) return { texto: 'Amanhã', tipo: 'aviso' as const };
-  return { texto: `Em ${dias} dias`, tipo: 'ok' as const };
-}
 
 function corDoSelo(c: Tema, tipo: 'perigo' | 'aviso' | 'ok') {
   if (tipo === 'perigo') return { fundo: c.perigoSuave, texto: c.perigo };
@@ -67,32 +17,22 @@ function corDoSelo(c: Tema, tipo: 'perigo' | 'aviso' | 'ok') {
   return { fundo: c.primariaSuave, texto: c.primaria };
 }
 
-// Cancela o lembrete antigo (se houver) e agenda o novo.
-// Se falhar, não interrompe: devolve ok = false.
-async function reagendar(nome: string, data: Date, idAntigo?: string | null) {
-  try {
-    await cancelarLembrete(idAntigo);
-    const id = await agendarLembrete(nome, data);
-    return { id, ok: true };
-  } catch (erro) {
-    console.error('Erro no lembrete:', erro);
-    return { id: null, ok: false };
-  }
-}
-
-export default function Tarefas() {
+export default function Tarefas({ tarefas, erro }: { tarefas: Tarefa[]; erro: string | null }) {
   const c = useTema();
   const s = useMemo(() => criarEstilos(c), [c]);
 
-  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
   const [mensagem, setMensagem] = useState<Mensagem | null>(null);
   const [nome, setNome] = useState('');
   const [intervalo, setIntervalo] = useState('1');
   const [unidade, setUnidade] = useState<Unidade>('semanas');
+  const [comecaHoje, setComecaHoje] = useState(true);
   const [ocupadoId, setOcupadoId] = useState<string | null>(null);
   const [confirmandoId, setConfirmandoId] = useState<string | null>(null);
-
   const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (temporizador.current) clearTimeout(temporizador.current);
+  }, []);
 
   function mostrarMensagem(texto: string, tipo: 'ok' | 'erro' = 'ok') {
     if (temporizador.current) clearTimeout(temporizador.current);
@@ -100,33 +40,11 @@ export default function Tarefas() {
     temporizador.current = setTimeout(() => setMensagem(null), 6000);
   }
 
-  useEffect(() => {
-    prepararNotificacoes().catch(e => console.error('Notificações:', e));
-
-    const q = query(collection(db, 'tarefas'), orderBy('proxima'));
-    const cancelar = onSnapshot(
-      q,
-      snap => {
-        setTarefas(
-          snap.docs.map(d => ({ id: d.id, ...(d.data() as Omit<Tarefa, 'id'>) }))
-        );
-      },
-      erro => {
-        console.error('Erro ao ler tarefas:', erro);
-        mostrarMensagem(`Não foi possível carregar as tarefas: ${erro.message}`, 'erro');
-      }
-    );
-
-    return () => {
-      cancelar();
-      if (temporizador.current) clearTimeout(temporizador.current);
-    };
-  }, []);
+  const n = parseInt(intervalo, 10);
+  const rotuloDepois = n ? `Em ${n} ${rotuloUnidade(n, unidade)}` : 'Depois do intervalo';
 
   async function adicionar() {
     const nomeLimpo = nome.trim();
-    const n = parseInt(intervalo, 10);
-
     if (!nomeLimpo) {
       mostrarMensagem('Digite o nome da tarefa.', 'erro');
       return;
@@ -137,7 +55,7 @@ export default function Tarefas() {
     }
 
     try {
-      const data = proximaData(n, unidade);
+      const data = comecaHoje ? hojeAsOito() : proximaData(n, unidade);
       const lembrete = await reagendar(nomeLimpo, data);
       await addDoc(collection(db, 'tarefas'), {
         nome: nomeLimpo,
@@ -149,40 +67,35 @@ export default function Tarefas() {
       });
       setNome('');
       mostrarMensagem(
-        `Tarefa adicionada. Próxima em ${data.toLocaleDateString('pt-BR')}.` +
+        (comecaHoje
+          ? 'Tarefa adicionada para hoje.'
+          : `Tarefa adicionada. Próxima em ${data.toLocaleDateString('pt-BR')}.`) +
           (lembrete.ok ? '' : ' (O lembrete não pôde ser agendado.)')
       );
-    } catch (erro: any) {
-      console.error('Erro ao adicionar:', erro);
-      mostrarMensagem(`Não foi possível adicionar: ${erro?.message ?? erro}`, 'erro');
+    } catch (e: any) {
+      console.error('Erro ao adicionar:', e);
+      mostrarMensagem(`Não foi possível adicionar: ${e?.message ?? e}`, 'erro');
     }
   }
 
   async function marcarFeita(t: Tarefa) {
-    if (ocupadoId) return;
+    if (ocupadoId || foiFeitaHoje(t)) return;
     setOcupadoId(t.id);
     try {
-      const data = proximaData(t.intervalo, t.unidade);
-      const lembrete = await reagendar(t.nome, data, t.notificacaoId);
-      await updateDoc(doc(db, 'tarefas', t.id), {
-        proxima: data.getTime(),
-        notificacaoId: lembrete.id,
-        feitaEm: Date.now(),
-      });
+      const { data, lembreteOk } = await marcarTarefaFeita(t);
       mostrarMensagem(
         `Feito! "${t.nome}" – próxima em ${data.toLocaleDateString('pt-BR')}.` +
-          (lembrete.ok ? '' : ' (O lembrete não pôde ser agendado.)')
+          (lembreteOk ? '' : ' (O lembrete não pôde ser agendado.)')
       );
-    } catch (erro: any) {
-      console.error('Erro ao marcar como feita:', erro);
-      mostrarMensagem(`Não foi possível marcar como feita: ${erro?.message ?? erro}`, 'erro');
+    } catch (e: any) {
+      console.error('Erro ao marcar como feita:', e);
+      mostrarMensagem(`Não foi possível marcar como feita: ${e?.message ?? e}`, 'erro');
     } finally {
       setOcupadoId(null);
     }
   }
 
   async function excluir(t: Tarefa) {
-    // Primeiro toque pede confirmação; segundo toque exclui.
     if (confirmandoId !== t.id) {
       setConfirmandoId(t.id);
       setTimeout(() => setConfirmandoId(atual => (atual === t.id ? null : atual)), 4000);
@@ -192,14 +105,14 @@ export default function Tarefas() {
     try {
       try {
         await cancelarLembrete(t.notificacaoId);
-      } catch (erro) {
-        console.error('Erro ao cancelar lembrete:', erro);
+      } catch (e) {
+        console.error('Erro ao cancelar lembrete:', e);
       }
       await deleteDoc(doc(db, 'tarefas', t.id));
       mostrarMensagem(`Tarefa "${t.nome}" excluída.`);
-    } catch (erro: any) {
-      console.error('Erro ao excluir:', erro);
-      mostrarMensagem(`Não foi possível excluir: ${erro?.message ?? erro}`, 'erro');
+    } catch (e: any) {
+      console.error('Erro ao excluir:', e);
+      mostrarMensagem(`Não foi possível excluir: ${e?.message ?? e}`, 'erro');
     }
   }
 
@@ -209,7 +122,7 @@ export default function Tarefas() {
       <Text style={s.rotulo}>Nova tarefa</Text>
       <TextInput
         style={s.input}
-        placeholder="Ex: Trocar a roupa de cama"
+        placeholder="Nome da tarefa"
         placeholderTextColor={c.placeholder}
         value={nome}
         onChangeText={setNome}
@@ -233,6 +146,21 @@ export default function Tarefas() {
           </Pressable>
         ))}
       </View>
+      <Text style={s.rotulo}>Primeira vez</Text>
+      <View style={s.linha}>
+        <Pressable
+          onPress={() => setComecaHoje(true)}
+          style={[s.chip, comecaHoje && s.chipAtivo]}
+        >
+          <Text style={[s.chipTexto, comecaHoje && s.chipTextoAtivo]}>Hoje</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => setComecaHoje(false)}
+          style={[s.chip, !comecaHoje && s.chipAtivo]}
+        >
+          <Text style={[s.chipTexto, !comecaHoje && s.chipTextoAtivo]}>{rotuloDepois}</Text>
+        </Pressable>
+      </View>
       <Pressable style={s.botao} onPress={adicionar}>
         <Text style={s.botaoTexto}>Adicionar tarefa</Text>
       </Pressable>
@@ -245,6 +173,9 @@ export default function Tarefas() {
         <Text style={[s.banner, mensagem.tipo === 'erro' ? s.bannerErro : s.bannerOk]}>
           {mensagem.texto}
         </Text>
+      ) : null}
+      {erro ? (
+        <Text style={[s.banner, s.bannerErro]}>Não foi possível carregar as tarefas: {erro}</Text>
       ) : null}
 
       <FlatList
@@ -260,9 +191,7 @@ export default function Tarefas() {
           </Pressable>
         }
         renderItem={({ item }) => {
-          const feitaHoje = item.feitaEm
-            ? new Date(item.feitaEm).toDateString() === new Date().toDateString()
-            : false;
+          const feitaHoje = foiFeitaHoje(item);
           const sit = feitaHoje
             ? { texto: 'Feito hoje ✓', tipo: 'ok' as const }
             : situacao(item.proxima);
@@ -290,11 +219,13 @@ export default function Tarefas() {
 
               <View style={{ gap: 8 }}>
                 <Pressable
-                  style={[s.feito, ocupado && s.desabilitado]}
-                  disabled={ocupado}
+                  style={[s.feito, feitaHoje && s.feitoConcluido, ocupado && s.desabilitado]}
+                  disabled={ocupado || feitaHoje}
                   onPress={() => marcarFeita(item)}
                 >
-                  <Text style={s.botaoTexto}>{ocupado ? '...' : 'Feito'}</Text>
+                  <Text style={s.botaoTexto}>
+                    {ocupado ? '...' : feitaHoje ? 'Feito ✓' : 'Feito'}
+                  </Text>
                 </Pressable>
                 <Pressable
                   style={[s.excluir, confirmando && s.excluirConfirmar]}
@@ -344,7 +275,7 @@ function criarEstilos(c: Tema) {
     chipAtivo: { backgroundColor: c.primaria, borderColor: c.primaria },
     chipTexto: { color: c.texto },
     chipTextoAtivo: { color: c.textoPrimaria, fontWeight: '600' },
-    botao: { backgroundColor: c.primaria, padding: 13, borderRadius: 10, alignItems: 'center' },
+    botao: { backgroundColor: c.destaque, padding: 13, borderRadius: 12, alignItems: 'center' },
     botaoTexto: { color: c.textoPrimaria, fontWeight: '700', textAlign: 'center' },
     vazio: { textAlign: 'center', color: c.textoSuave, marginTop: 24 },
     card: {
@@ -359,6 +290,7 @@ function criarEstilos(c: Tema) {
     },
     seloTexto: { fontSize: 12, fontWeight: '700' },
     feito: { backgroundColor: c.primaria, paddingHorizontal: 16, paddingVertical: 9, borderRadius: 10 },
+    feitoConcluido: { backgroundColor: c.sucesso },
     desabilitado: { opacity: 0.5 },
     excluir: {
       borderWidth: 1, borderColor: c.perigo,

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, StyleSheet } from 'react-native';
 import {
   collection, addDoc, onSnapshot, deleteDoc, doc, query, where,
@@ -42,6 +42,7 @@ export default function Cardapio() {
   const [refeicao, setRefeicao] = useState<Refeicao>('Almoço');
   const [prato, setPrato] = useState('');
   const [editando, setEditando] = useState(false);
+  const rolagem = useRef<ScrollView>(null);
 
   const dias = Array.from({ length: 7 }, (_, i) => somarDias(inicio, i));
   const hoje = chave(new Date());
@@ -123,7 +124,7 @@ export default function Cardapio() {
     d.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' });
 
   return (
-    <ScrollView contentContainerStyle={s.container} keyboardShouldPersistTaps="handled">
+    <ScrollView ref={rolagem} contentContainerStyle={s.container} keyboardShouldPersistTaps="handled">
       <Text style={s.titulo}>Cardápio da semana</Text>
 
       <View style={s.linha}>
@@ -144,15 +145,38 @@ export default function Cardapio() {
       <View style={s.painel}>
         <Text style={s.rotulo}>Dia</Text>
         <View style={s.linha}>
-          {dias.map((d, i) => (
-            <Pressable
-              key={i}
-              onPress={() => setDiaSel(i)}
-              style={[s.chip, diaSel === i && s.chipAtivo]}
-            >
-              <Text style={[s.chipTexto, diaSel === i && s.chipTextoAtivo]}>{nomeDia(d)}</Text>
-            </Pressable>
-          ))}
+         {dias.map((d, i) => {
+  const doDia = itens
+    .filter(it => it.data === chave(d))
+    .sort((a, b) => REFEICOES.indexOf(a.refeicao) - REFEICOES.indexOf(b.refeicao));
+  return (
+    <Pressable
+      key={i}
+      onPress={() => {
+        setDiaSel(i);
+        rolagem.current?.scrollTo({ y: 0, animated: true });
+      }}
+      style={[s.card, chave(d) === hoje && s.cardHoje, diaSel === i && s.cardSel]}
+    >
+      <View style={s.cardCabecalho}>
+        <Text style={s.cardTitulo}>{nomeDia(d)}</Text>
+        {diaSel === i && <Text style={s.selecionado}>Dia selecionado</Text>}
+      </View>
+      {doDia.length === 0 && <Text style={s.suave}>Sem refeições cadastradas</Text>}
+      {doDia.map(it => (
+        <View key={it.id} style={s.item}>
+          <Text style={s.itemTexto}>
+            <Text style={s.negrito}>{it.refeicao}: </Text>
+            {it.prato}
+          </Text>
+          <Pressable onPress={() => excluirItem(it.id)} hitSlop={8}>
+            <Text style={s.x}>✕</Text>
+          </Pressable>
+        </View>
+      ))}
+    </Pressable>
+  );
+})}
         </View>
 
         <Text style={s.rotulo}>Refeição</Text>
@@ -195,7 +219,7 @@ export default function Cardapio() {
 
         <TextInput
           style={s.input}
-          placeholder="Novo prato (ex: Arroz, feijão e frango grelhado)"
+          placeholder="Nome do prato"
           placeholderTextColor={c.placeholder}
           value={prato}
           onChangeText={setPrato}
@@ -279,6 +303,9 @@ function criarEstilos(c: Tema) {
       borderRadius: 16, padding: 14, gap: 6,
     },
     cardHoje: { borderColor: c.primaria, borderWidth: 2 },
+    cardSel: { backgroundColor: c.primariaSuave, borderColor: c.primaria },
+cardCabecalho: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+selecionado: { color: c.primaria, fontSize: 12, fontWeight: '700' },
     cardTitulo: { fontWeight: '700', fontSize: 16, color: c.texto, textTransform: 'capitalize' },
     item: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     itemTexto: { flex: 1, color: c.texto },
