@@ -6,3 +6,4 @@
 - ainda sobre o calendario, quero que de para escolher a frenquencia com que vou ser lembrado, mensalmente, semanalmente ou anualmente ou em um intervalo que eu escolha, ou simplismente, sem intervalo, apenas um evento naquele dia
 - sobre o botão do feito, achei legal que ficou a mensagem de "feito hoje", mas vamos pensar em trocar a cor do botão feito quando a atividade naquele dia já tiver sido concluida
 - Icone do app mais bonito
+- deixar escolher entre tema escuro e tema claro, acha interessante ter uma tela tipo do usuário? com a opção de mudar o tema, mas o que mais poderiamos adicionar? pq se for só isso podemos manter ele apenas no tema claro, ou na tela inicial com o resumo ter essa opção de troca, pois fica melhor no celular do que com tema escuro.
