@@ -38,7 +38,7 @@ const escuro: typeof claro = {
   textoPrimaria: '#2A1520',
   destaque: '#F3ECEF',
   textoDestaque: '#1B1719',
-  sucesso: '#7FC4A0',
+  sucesso: '#3F7D5E',
   sucessoSuave: '#203329',
   lavanda: '#B8ABEB',
   lavandaSuave: '#2D2842',
