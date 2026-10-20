@@ -5,3 +5,4 @@
 - no calendario, quero além desses lembretes anteriore que já estão bem legais, quero que lembre no dia também
 - ainda sobre o calendario, quero que de para escolher a frenquencia com que vou ser lembrado, mensalmente, semanalmente ou anualmente ou em um intervalo que eu escolha, ou simplismente, sem intervalo, apenas um evento naquele dia
 - sobre o botão do feito, achei legal que ficou a mensagem de "feito hoje", mas vamos pensar em trocar a cor do botão feito quando a atividade naquele dia já tiver sido concluida
+- Icone do app mais bonito
