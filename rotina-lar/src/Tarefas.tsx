@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { View, Text, TextInput, Pressable, FlatList, StyleSheet } from 'react-native';
 import {
   collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc, query, orderBy,
-} from 'firebase/firestore';
+} from 'firebase/firestone';
 import { db } from './firebase';
 import {
   prepararNotificacoes, agendarLembrete, cancelarLembrete, testarEm10Segundos,
@@ -17,6 +17,7 @@ type Tarefa = {
   unidade: Unidade;
   proxima: number;
   notificacaoId?: string | null;
+  feitaEm?: number | null;
 };
 
 const UNIDADES: Unidade[] = ['dias', 'semanas', 'meses'];
@@ -61,6 +62,7 @@ export default function Tarefas() {
   const s = useMemo(() => criarEstilos(c), [c]);
 
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
+  const [mensagem, setMensagem] = useState('');
   const [nome, setNome] = useState('');
   const [intervalo, setIntervalo] = useState('1');
   const [unidade, setUnidade] = useState<Unidade>('semanas');
@@ -94,15 +96,34 @@ export default function Tarefas() {
     });
     setNome('');
   }
-
   async function marcarFeita(t: Tarefa) {
-    await cancelarLembrete(t.notificacaoId);
     const data = proximaData(t.intervalo, t.unidade);
-    const notificacaoId = await agendarLembrete(t.nome, data);
-    await updateDoc(doc(db, 'tarefas', t.id), {
-      proxima: data.getTime(),
-      notificacaoId,
-    });
+    let notificacaoId: string | null = null;
+    let lembreteOk = true;
+
+    try {
+      await cancelarLembrete(t.notificacaoId);
+      notificacaoId = await agendarLembrete(t.nome, data);
+    } catch (erro) {
+      console.error('Erro no lembrete:', erro);
+      lembreteOk = false;
+    }
+
+    try {
+      await updateDoc(doc(db, 'tarefas', t.id), {
+        proxima: data.getTime(),
+        notificacaoId,
+        feitaEm: Date.now(),
+      });
+      setMensagem(
+        `Feito! "${t.nome}" – próxima em ${data.toLocaleDateString('pt-BR')}.` +
+        (lembreteOk ? '' : ' (O lembrete não pôde ser agendado.)')
+      );
+    } catch (erro: any) {
+      console.error('Erro ao marcar como feita:', erro);
+      setMensagem(`Não foi possível marcar como feita: ${erro?.message ?? erro}`);
+    }
+    setTimeout(() => setMensagem(''), 6000);
   }
 
   async function excluir(t: Tarefa) {
@@ -112,6 +133,7 @@ export default function Tarefas() {
 
   const formulario = (
     <View style={s.formulario}>
+      {mensagem ? <Text style={s.banner}>{mensagem}</Text> : null}
       <Text style={s.titulo}>Tarefas da casa</Text>
       <Text style={s.rotulo}>Nova tarefa</Text>
       <TextInput
@@ -159,7 +181,12 @@ export default function Tarefas() {
         </Pressable>
       }
       renderItem={({ item }) => {
-        const sit = situacao(item.proxima);
+        const feitaHoje = item.feitaEm
+          ? new Date(item.feitaEm).toDateString() === new Date().toDateString()
+          : false;
+        const sit = feitaHoje
+          ? { texto: 'Feito hoje ✓', tipo: 'ok' as const }
+          : situacao(item.proxima);
         const cor = corDoSelo(c, sit.tipo);
         return (
           <View style={s.card}>
@@ -167,6 +194,7 @@ export default function Tarefas() {
               <Text style={s.cardNome}>{item.nome}</Text>
               <Text style={s.suave}>
                 A cada {item.intervalo} {rotuloUnidade(item.intervalo, item.unidade)} · próxima{' '}
+                Última vez: {new Date(item.feitaEm).toLocaleDateString('pt-BR')}
                 {new Date(item.proxima).toLocaleDateString('pt-BR')}
               </Text>
               <View style={[s.selo, { backgroundColor: cor.fundo }]}>
@@ -227,5 +255,9 @@ function criarEstilos(c: Tema) {
     excluir: { borderWidth: 1, borderColor: c.perigo, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10 },
     excluirTexto: { color: c.perigo, fontWeight: '600', textAlign: 'center' },
     linkTeste: { color: c.textoSuave, textAlign: 'center', textDecorationLine: 'underline', marginTop: 16 },
+    banner: {
+  backgroundColor: c.primariaSuave, color: c.primaria, fontWeight: '600',
+  borderRadius: 10, padding: 10, overflow: 'hidden',
+},
   });
 }
