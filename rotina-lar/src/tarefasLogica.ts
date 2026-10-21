@@ -12,6 +12,7 @@ export type Tarefa = {
   proxima: number;
   notificacaoId?: string | null;
   feitaEm?: number | null;
+  desfazer?: { proxima: number; feitaEm: number | null } | null;
 };
 
 export const UNIDADES: Unidade[] = ['dias', 'semanas', 'meses'];
@@ -91,8 +92,24 @@ export async function marcarTarefaFeita(t: Tarefa) {
     proxima: data.getTime(),
     notificacaoId: lembrete.id,
     feitaEm: Date.now(),
+    desfazer: { proxima: t.proxima, feitaEm: t.feitaEm ?? null },
   });
   return { data, lembreteOk: lembrete.ok };
+}
+
+export async function desfazerTarefaFeita(t: Tarefa) {
+  // Tarefas marcadas antes desta função existir não têm o estado anterior guardado:
+  // nesse caso, voltam a vencer hoje.
+  const anterior = t.desfazer?.proxima ?? hojeAsOito().getTime();
+  const feitaEmAnterior = t.desfazer?.feitaEm ?? null;
+  const lembrete = await reagendar(t.nome, new Date(anterior), t.notificacaoId);
+  await updateDoc(doc(db, 'tarefas', t.id), {
+    proxima: anterior,
+    feitaEm: feitaEmAnterior,
+    notificacaoId: lembrete.id,
+    desfazer: null,
+  });
+  return { lembreteOk: lembrete.ok };
 }
 
 export function useTarefas() {

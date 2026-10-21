@@ -1,4 +1,5 @@
-import { useColorScheme } from 'react-native';
+import { useSyncExternalStore } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const claro = {
   fundo: '#FFF9F2',
@@ -13,7 +14,7 @@ const claro = {
   textoPrimaria: '#FFFFFF',
   destaque: '#3A363A',
   textoDestaque: '#FFFFFF',
-  sucesso: '#5E9B7C',
+  sucesso: '#3F7D5E',
   sucessoSuave: '#E3F1EA',
   lavanda: '#6F62A8',
   lavandaSuave: '#ECE8F8',
@@ -38,7 +39,7 @@ const escuro: typeof claro = {
   textoPrimaria: '#2A1520',
   destaque: '#F3ECEF',
   textoDestaque: '#1B1719',
-  sucesso: '#3F7D5E',
+  sucesso: '#7FC4A0',
   sucessoSuave: '#203329',
   lavanda: '#B8ABEB',
   lavandaSuave: '#2D2842',
@@ -51,7 +52,46 @@ const escuro: typeof claro = {
 };
 
 export type Tema = typeof claro;
+export type ModoTema = 'claro' | 'escuro';
+
+const CHAVE = 'tema-preferido';
+let modo: ModoTema = 'claro';
+const ouvintes = new Set<() => void>();
+
+function definir(novo: ModoTema) {
+  if (novo === modo) return;
+  modo = novo;
+  ouvintes.forEach(avisar => avisar());
+}
+
+// Ao abrir o app, recupera a escolha salva (se houver).
+AsyncStorage.getItem(CHAVE)
+  .then(valor => {
+    if (valor === 'claro' || valor === 'escuro') definir(valor);
+  })
+  .catch(() => {});
+
+export function alternarTema() {
+  const novo: ModoTema = modo === 'claro' ? 'escuro' : 'claro';
+  definir(novo);
+  AsyncStorage.setItem(CHAVE, novo).catch(() => {});
+}
+
+function assinar(avisar: () => void) {
+  ouvintes.add(avisar);
+  return () => {
+    ouvintes.delete(avisar);
+  };
+}
+
+function ler() {
+  return modo;
+}
+
+export function useModoTema(): ModoTema {
+  return useSyncExternalStore(assinar, ler, ler);
+}
 
 export function useTema(): Tema {
-  return useColorScheme() === 'dark' ? escuro : claro;
+  return useModoTema() === 'escuro' ? escuro : claro;
 }

@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
 import { db } from './firebase';
 import { contarLembretesAgendados } from './notificacoes';
+import { IconeTipo, ICONE_REPETIR } from './IconeTipo';
 import {
-  TIPOS, EMOJI, OPCOES_AVISO, chaveData, ocorreEm, proximaData, lembretesDe,
+  TIPOS, OPCOES_AVISO, chaveData, ocorreEm, proximaData, lembretesDe,
   repeticaoDe, textoRepeticao, avisosPadrao, descreverAvisos,
   type Evento, type TipoEvento, type Repeticao, type UnidadeRep,
 } from './eventos';
@@ -216,7 +218,7 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
             style={s.nav}
             onPress={() => setMes(new Date(mes.getFullYear(), mes.getMonth() - 1, 1))}
           >
-            <Text style={s.navTexto}>‹</Text>
+            <Ionicons name="chevron-back" size={18} color={c.primaria} />
           </Pressable>
           <Pressable
             onPress={() => {
@@ -231,7 +233,7 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
             style={s.nav}
             onPress={() => setMes(new Date(mes.getFullYear(), mes.getMonth() + 1, 1))}
           >
-            <Text style={s.navTexto}>›</Text>
+            <Ionicons name="chevron-forward" size={18} color={c.primaria} />
           </Pressable>
         </View>
 
@@ -285,13 +287,17 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
                 <Text style={s.itemTitulo}>{ev.titulo}</Text>
                 <View style={s.linhaPequena}>
                   <View style={[s.etiqueta, { backgroundColor: cor.fundo }]}>
-                    <Text style={[s.etiquetaTexto, { color: cor.texto }]}>
-                      {EMOJI[ev.tipo]} {ev.tipo}
-                    </Text>
+                    <IconeTipo tipo={ev.tipo} cor={cor.texto} />
+                    <Text style={[s.etiquetaTexto, { color: cor.texto }]}>{ev.tipo}</Text>
                   </View>
                   {ev.hora ? <Text style={s.suave}>{ev.hora}</Text> : null}
                 </View>
-                {rep ? <Text style={s.suave}>🔁 {textoRepeticao(rep)}</Text> : null}
+                {rep ? (
+                  <View style={s.linhaPequena}>
+                    <Ionicons name={ICONE_REPETIR} size={14} color={c.textoSuave} />
+                    <Text style={s.suave}>{textoRepeticao(rep)}</Text>
+                  </View>
+                ) : null}
               </View>
               <Pressable
                 style={[s.excluir, confirmando && s.excluirConfirmar]}
@@ -315,17 +321,19 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
           onChangeText={setTitulo}
         />
         <View style={s.linha}>
-          {TIPOS.map(t => (
-            <Pressable
-              key={t}
-              onPress={() => escolherTipo(t)}
-              style={[s.chip, tipo === t && s.chipAtivo]}
-            >
-              <Text style={[s.chipTexto, tipo === t && s.chipTextoAtivo]}>
-                {EMOJI[t]} {t}
-              </Text>
-            </Pressable>
-          ))}
+          {TIPOS.map(t => {
+            const ativo = tipo === t;
+            return (
+              <Pressable
+                key={t}
+                onPress={() => escolherTipo(t)}
+                style={[s.chip, ativo && s.chipAtivo]}
+              >
+                <IconeTipo tipo={t} cor={ativo ? c.textoPrimaria : c.textoSuave} tamanho={16} />
+                <Text style={[s.chipTexto, ativo && s.chipTextoAtivo]}>{t}</Text>
+              </Pressable>
+            );
+          })}
         </View>
         {tipo !== 'Aniversário' && (
           <TextInput
@@ -341,15 +349,25 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
 
         <Text style={s.rotulo}>Repetir</Text>
         <View style={s.linha}>
-          {REP_CHIPS.map(r => (
-            <Pressable
-              key={r.id}
-              onPress={() => setRepChip(r.id)}
-              style={[s.chip, repChip === r.id && s.chipAtivo]}
-            >
-              <Text style={[s.chipTexto, repChip === r.id && s.chipTextoAtivo]}>{r.rotulo}</Text>
-            </Pressable>
-          ))}
+          {REP_CHIPS.map(r => {
+            const ativo = repChip === r.id;
+            return (
+              <Pressable
+                key={r.id}
+                onPress={() => setRepChip(r.id)}
+                style={[s.chip, ativo && s.chipAtivo]}
+              >
+                {r.id !== 'nenhuma' && (
+                  <Ionicons
+                    name={ICONE_REPETIR}
+                    size={14}
+                    color={ativo ? c.textoPrimaria : c.textoSuave}
+                  />
+                )}
+                <Text style={[s.chipTexto, ativo && s.chipTextoAtivo]}>{r.rotulo}</Text>
+              </Pressable>
+            );
+          })}
         </View>
         {repChip === 'personalizado' && (
           <View style={s.linha}>
@@ -383,9 +401,8 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
                 onPress={() => alternarAviso(o.dias)}
                 style={[s.chip, ligado && s.chipAtivo]}
               >
-                <Text style={[s.chipTexto, ligado && s.chipTextoAtivo]}>
-                  {ligado ? '✓ ' : ''}{o.rotulo}
-                </Text>
+                {ligado && <Ionicons name="checkmark" size={14} color={c.textoPrimaria} />}
+                <Text style={[s.chipTexto, ligado && s.chipTextoAtivo]}>{o.rotulo}</Text>
               </Pressable>
             );
           })}
@@ -407,7 +424,10 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
           return (
             <View key={ev.id} style={s.item}>
               <View style={{ flex: 1, gap: 4 }}>
-                <Text style={s.itemTitulo}>{EMOJI[ev.tipo]} {ev.titulo}</Text>
+                <View style={s.linhaPequena}>
+                  <IconeTipo tipo={ev.tipo} cor={cor.texto} tamanho={16} />
+                  <Text style={s.itemTitulo}>{ev.titulo}</Text>
+                </View>
                 <Text style={s.suave}>
                   {data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
                   {ev.hora ? ` às ${ev.hora}` : ''}
@@ -458,7 +478,6 @@ function criarEstilos(c: Tema) {
       width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center',
       backgroundColor: c.primariaSuave,
     },
-    navTexto: { color: c.primaria, fontSize: 20, fontWeight: '700' },
     semana: { flexDirection: 'row' },
     diaSemana: {
       width: '14.2857%', textAlign: 'center', color: c.textoSuave,
@@ -482,7 +501,10 @@ function criarEstilos(c: Tema) {
     },
     itemTitulo: { fontWeight: '700', color: c.texto },
     linhaPequena: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    etiqueta: { alignSelf: 'flex-start', borderRadius: 12, paddingHorizontal: 10, paddingVertical: 3 },
+    etiqueta: {
+      flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start',
+      borderRadius: 12, paddingHorizontal: 10, paddingVertical: 3,
+    },
     etiquetaTexto: { fontSize: 12, fontWeight: '700' },
     divisor: { height: 1, backgroundColor: c.borda },
     input: {
@@ -492,6 +514,7 @@ function criarEstilos(c: Tema) {
     inputNumero: { width: 60, textAlign: 'center' },
     linha: { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
     chip: {
+      flexDirection: 'row', alignItems: 'center', gap: 6,
       borderWidth: 1, borderColor: c.borda, borderRadius: 20,
       paddingHorizontal: 14, paddingVertical: 7, backgroundColor: c.input,
     },

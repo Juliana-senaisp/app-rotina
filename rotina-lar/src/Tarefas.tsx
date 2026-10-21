@@ -5,7 +5,7 @@ import { db } from './firebase';
 import { cancelarLembrete, testarEm10Segundos } from './notificacoes';
 import {
   UNIDADES, proximaData, hojeAsOito, rotuloUnidade, situacao, foiFeitaHoje,
-  reagendar, marcarTarefaFeita, type Tarefa, type Unidade,
+  reagendar, marcarTarefaFeita, desfazerTarefaFeita, type Tarefa, type Unidade,
 } from './tarefasLogica';
 import { useTema, type Tema } from './tema';
 
@@ -79,21 +79,27 @@ export default function Tarefas({ tarefas, erro }: { tarefas: Tarefa[]; erro: st
   }
 
   async function marcarFeita(t: Tarefa) {
-    if (ocupadoId || foiFeitaHoje(t)) return;
-    setOcupadoId(t.id);
-    try {
+  if (ocupadoId) return;
+  setOcupadoId(t.id);
+  try {
+    if (foiFeitaHoje(t)) {
+      await desfazerTarefaFeita(t);
+      mostrarMensagem(`"${t.nome}" voltou a ficar pendente.`);
+    } else {
       const { data, lembreteOk } = await marcarTarefaFeita(t);
       mostrarMensagem(
         `Feito! "${t.nome}" – próxima em ${data.toLocaleDateString('pt-BR')}.` +
-          (lembreteOk ? '' : ' (O lembrete não pôde ser agendado.)')
+          (lembreteOk ? '' : ' (O lembrete não pôde ser agendado.)') +
+          ' Toque em "Feito ✓" para desmarcar.'
       );
-    } catch (e: any) {
-      console.error('Erro ao marcar como feita:', e);
-      mostrarMensagem(`Não foi possível marcar como feita: ${e?.message ?? e}`, 'erro');
-    } finally {
-      setOcupadoId(null);
     }
+  } catch (e: any) {
+    console.error('Erro ao marcar como feita:', e);
+    mostrarMensagem(`Não foi possível atualizar a tarefa: ${e?.message ?? e}`, 'erro');
+  } finally {
+    setOcupadoId(null);
   }
+}
 
   async function excluir(t: Tarefa) {
     if (confirmandoId !== t.id) {
@@ -193,7 +199,7 @@ export default function Tarefas({ tarefas, erro }: { tarefas: Tarefa[]; erro: st
         renderItem={({ item }) => {
           const feitaHoje = foiFeitaHoje(item);
           const sit = feitaHoje
-            ? { texto: 'Feito hoje ✓', tipo: 'ok' as const }
+            ? { texto: 'Feito hoje', tipo: 'ok' as const }
             : situacao(item.proxima);
           const cor = corDoSelo(c, sit.tipo);
           const ocupado = ocupadoId === item.id;
@@ -220,7 +226,7 @@ export default function Tarefas({ tarefas, erro }: { tarefas: Tarefa[]; erro: st
               <View style={{ gap: 8 }}>
                 <Pressable
                   style={[s.feito, feitaHoje && s.feitoConcluido, ocupado && s.desabilitado]}
-                  disabled={ocupado || feitaHoje}
+                  disabled={ocupado}
                   onPress={() => marcarFeita(item)}
                 >
                   <Text style={s.botaoTexto}>
