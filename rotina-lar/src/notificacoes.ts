@@ -60,11 +60,18 @@ export async function testarEm10Segundos() {
 // ---------- Lembretes dos eventos do calendário ----------
 
 const ORIGEM_EVENTO = 'evento';
+const LIMITE_LEMBRETES = 150; // o Android limita a quantidade de alarmes por app
 let fila: Promise<void> = Promise.resolve();
 
 function textoDoLembrete(ev: Evento, diasAntes: number, ocorrencia: Date) {
   const quando =
-    diasAntes === 1 ? 'amanhã' : diasAntes === 7 ? 'em 1 semana' : `em ${diasAntes} dias`;
+    diasAntes === 0
+      ? 'hoje'
+      : diasAntes === 1
+      ? 'amanhã'
+      : diasAntes === 7
+      ? 'em 1 semana'
+      : `em ${diasAntes} dias`;
   const data = ocorrencia.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
   const hora = ev.hora ? ` às ${ev.hora}` : '';
   return `${ev.tipo} ${quando} (${data}${hora})`;
@@ -79,22 +86,24 @@ async function executarSincronizacao(eventos: Evento[]) {
     }
   }
 
+  // Agenda os mais próximos primeiro, respeitando o limite.
   const agora = new Date();
-  for (const ev of eventos) {
-    for (const l of lembretesDe(ev, agora)) {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: `${EMOJI[ev.tipo]} ${ev.titulo}`,
-          body: textoDoLembrete(ev, l.diasAntes, l.ocorrencia),
-          data: { origem: ORIGEM_EVENTO, eventoId: ev.id },
-        },
-        trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.DATE,
-          date: l.quando,
-          channelId: 'lembretes',
-        },
-      });
-    }
+  const todos = eventos.flatMap(ev => lembretesDe(ev, agora).map(l => ({ ev, l })));
+  todos.sort((a, b) => a.l.quando.getTime() - b.l.quando.getTime());
+
+  for (const { ev, l } of todos.slice(0, LIMITE_LEMBRETES)) {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: `${EMOJI[ev.tipo]} ${ev.titulo}`,
+        body: textoDoLembrete(ev, l.diasAntes, l.ocorrencia),
+        data: { origem: ORIGEM_EVENTO, eventoId: ev.id },
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: l.quando,
+        channelId: 'lembretes',
+      },
+    });
   }
 }
 
@@ -110,5 +119,5 @@ export function sincronizarLembretesEventos(eventos: Evento[]): Promise<void> {
 export async function contarLembretesAgendados(): Promise<number> {
   if (Platform.OS === 'web') return 0;
   const todas = await Notifications.getAllScheduledNotificationsAsync();
-  return todas.length;
+  return todas.filter(a => a.content.data?.origem === ORIGEM_EVENTO).length;
 }

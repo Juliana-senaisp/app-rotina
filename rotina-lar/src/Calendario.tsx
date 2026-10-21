@@ -4,13 +4,32 @@ import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
 import { db } from './firebase';
 import { contarLembretesAgendados } from './notificacoes';
 import {
-  TIPOS, EMOJI, chaveData, ocorreEm, proximaData, lembretesDe,
-  type Evento, type TipoEvento,
+  TIPOS, EMOJI, OPCOES_AVISO, chaveData, ocorreEm, proximaData, lembretesDe,
+  repeticaoDe, textoRepeticao, avisosPadrao, descreverAvisos,
+  type Evento, type TipoEvento, type Repeticao, type UnidadeRep,
 } from './eventos';
 import { useTema, type Tema } from './tema';
 
+type RepChip = 'nenhuma' | 'semanal' | 'mensal' | 'anual' | 'personalizado';
+
+const REP_CHIPS: { id: RepChip; rotulo: string }[] = [
+  { id: 'nenhuma', rotulo: 'Não repete' },
+  { id: 'semanal', rotulo: 'Toda semana' },
+  { id: 'mensal', rotulo: 'Todo mês' },
+  { id: 'anual', rotulo: 'Todo ano' },
+  { id: 'personalizado', rotulo: 'Personalizado' },
+];
+const UNIDADES_REP: UnidadeRep[] = ['dias', 'semanas', 'meses', 'anos'];
 const DIAS_SEMANA = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
 const HORA_VALIDA = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+function repeticaoDoChip(chip: RepChip, cada: number, unidade: UnidadeRep): Repeticao | null {
+  if (chip === 'semanal') return { cada: 1, unidade: 'semanas' };
+  if (chip === 'mensal') return { cada: 1, unidade: 'meses' };
+  if (chip === 'anual') return { cada: 1, unidade: 'anos' };
+  if (chip === 'personalizado') return { cada: cada > 0 ? cada : 1, unidade };
+  return null;
+}
 
 function corDoTipo(c: Tema, tipo: TipoEvento) {
   if (tipo === 'Aniversário') return { fundo: c.primariaSuave, texto: c.primaria };
@@ -44,6 +63,11 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
   const [titulo, setTitulo] = useState('');
   const [tipo, setTipo] = useState<TipoEvento>('Evento');
   const [hora, setHora] = useState('');
+  const [repChip, setRepChip] = useState<RepChip>('nenhuma');
+  const [cadaTxt, setCadaTxt] = useState('2');
+  const [unidadeRep, setUnidadeRep] = useState<UnidadeRep>('semanas');
+  const [avisos, setAvisos] = useState<number[]>([7, 3, 2, 1, 0]);
+  const [avisosManual, setAvisosManual] = useState(false);
   const [aviso, setAviso] = useState<{ texto: string; erro: boolean } | null>(null);
   const [confirmandoId, setConfirmandoId] = useState<string | null>(null);
   const [qtdLembretes, setQtdLembretes] = useState<number | null>(null);
@@ -53,10 +77,28 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
     if (temporizador.current) clearTimeout(temporizador.current);
   }, []);
 
+  // Enquanto você não mexer nos botões de aviso, eles seguem o padrão da repetição.
+  useEffect(() => {
+    if (avisosManual) return;
+    const cada = parseInt(cadaTxt, 10) || 1;
+    setAvisos(avisosPadrao(repeticaoDoChip(repChip, cada, unidadeRep)));
+  }, [repChip, cadaTxt, unidadeRep, avisosManual]);
+
   function mostrarAviso(texto: string, ehErro = false) {
     if (temporizador.current) clearTimeout(temporizador.current);
     setAviso({ texto, erro: ehErro });
     temporizador.current = setTimeout(() => setAviso(null), 7000);
+  }
+
+  function escolherTipo(t: TipoEvento) {
+    if (t === 'Aniversário') setRepChip('anual');
+    else if (tipo === 'Aniversário') setRepChip('nenhuma');
+    setTipo(t);
+  }
+
+  function alternarAviso(dias: number) {
+    setAvisosManual(true);
+    setAvisos(atual => (atual.includes(dias) ? atual.filter(d => d !== dias) : [...atual, dias]));
   }
 
   // Grade do mês (semana começando na segunda)
@@ -84,6 +126,7 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
   async function adicionar() {
     const tituloLimpo = titulo.trim();
     const horaLimpa = tipo === 'Aniversário' ? '' : hora.trim();
+    const cada = parseInt(cadaTxt, 10);
 
     if (!tituloLimpo) {
       mostrarAviso('Digite um título para o evento.', true);
@@ -93,6 +136,10 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
       mostrarAviso('Use o horário no formato HH:MM, por exemplo 14:30.', true);
       return;
     }
+    if (repChip === 'personalizado' && (!cada || cada < 1)) {
+      mostrarAviso('Informe um intervalo de repetição de 1 ou mais.', true);
+      return;
+    }
 
     try {
       const novo = {
@@ -100,20 +147,27 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
         tipo,
         data: chaveData(diaSel),
         hora: horaLimpa || null,
+        repeticao: repeticaoDoChip(repChip, cada, unidadeRep),
+        avisos: [...avisos].sort((a, b) => b - a),
       };
       await addDoc(collection(db, 'eventos'), novo);
 
-      const dias = lembretesDe({ id: '', ...novo })
-        .map(l => l.diasAntes)
-        .filter((d, i, a) => a.indexOf(d) === i)
-        .sort((a, b) => b - a);
+      // Mostra os lembretes que valem para a próxima ocorrência.
+      const futuros = lembretesDe({ id: '', ...novo });
+      const primeira = futuros[0]?.ocorrencia.getTime();
+      const dias = futuros
+        .filter(l => l.ocorrencia.getTime() === primeira)
+        .map(l => l.diasAntes);
       mostrarAviso(
         dias.length
-          ? `Salvo! Lembretes às 9h, ${dias.join(', ')} dia(s) antes.`
-          : 'Salvo! Não há lembretes antecipados, porque a data está muito próxima.'
+          ? `Salvo! Lembretes: ${descreverAvisos(dias)}.`
+          : 'Salvo! Sem lembretes (nenhum aviso marcado ou data muito próxima).'
       );
+
       setTitulo('');
       setHora('');
+      setRepChip(tipo === 'Aniversário' ? 'anual' : 'nenhuma');
+      setAvisosManual(false);
     } catch (e: any) {
       console.error('Erro ao salvar evento:', e);
       mostrarAviso(`Não foi possível salvar: ${e?.message ?? e}`, true);
@@ -224,6 +278,7 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
         {doDia.map(ev => {
           const cor = corDoTipo(c, ev.tipo);
           const confirmando = confirmandoId === ev.id;
+          const rep = repeticaoDe(ev);
           return (
             <View key={ev.id} style={s.item}>
               <View style={{ flex: 1, gap: 4 }}>
@@ -236,6 +291,7 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
                   </View>
                   {ev.hora ? <Text style={s.suave}>{ev.hora}</Text> : null}
                 </View>
+                {rep ? <Text style={s.suave}>🔁 {textoRepeticao(rep)}</Text> : null}
               </View>
               <Pressable
                 style={[s.excluir, confirmando && s.excluirConfirmar]}
@@ -262,7 +318,7 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
           {TIPOS.map(t => (
             <Pressable
               key={t}
-              onPress={() => setTipo(t)}
+              onPress={() => escolherTipo(t)}
               style={[s.chip, tipo === t && s.chipAtivo]}
             >
               <Text style={[s.chipTexto, tipo === t && s.chipTextoAtivo]}>
@@ -274,7 +330,7 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
         {tipo !== 'Aniversário' && (
           <TextInput
             style={s.input}
-            placeholder="Horário (opcional)"
+            placeholder="Horário (opcional), HH:MM"
             placeholderTextColor={c.placeholder}
             value={hora}
             maxLength={5}
@@ -282,9 +338,62 @@ export default function Calendario({ eventos, erro }: { eventos: Evento[]; erro:
             onChangeText={setHora}
           />
         )}
-        {tipo === 'Aniversário' && (
-          <Text style={s.suave}>Aniversários se repetem todo ano nesta data.</Text>
+
+        <Text style={s.rotulo}>Repetir</Text>
+        <View style={s.linha}>
+          {REP_CHIPS.map(r => (
+            <Pressable
+              key={r.id}
+              onPress={() => setRepChip(r.id)}
+              style={[s.chip, repChip === r.id && s.chipAtivo]}
+            >
+              <Text style={[s.chipTexto, repChip === r.id && s.chipTextoAtivo]}>{r.rotulo}</Text>
+            </Pressable>
+          ))}
+        </View>
+        {repChip === 'personalizado' && (
+          <View style={s.linha}>
+            <Text style={s.texto}>A cada</Text>
+            <TextInput
+              style={[s.input, s.inputNumero]}
+              keyboardType="numeric"
+              maxLength={3}
+              value={cadaTxt}
+              onChangeText={setCadaTxt}
+            />
+            {UNIDADES_REP.map(u => (
+              <Pressable
+                key={u}
+                onPress={() => setUnidadeRep(u)}
+                style={[s.chip, unidadeRep === u && s.chipAtivo]}
+              >
+                <Text style={[s.chipTexto, unidadeRep === u && s.chipTextoAtivo]}>{u}</Text>
+              </Pressable>
+            ))}
+          </View>
         )}
+
+        <Text style={s.rotulo}>Avisar</Text>
+        <View style={s.linha}>
+          {OPCOES_AVISO.map(o => {
+            const ligado = avisos.includes(o.dias);
+            return (
+              <Pressable
+                key={o.dias}
+                onPress={() => alternarAviso(o.dias)}
+                style={[s.chip, ligado && s.chipAtivo]}
+              >
+                <Text style={[s.chipTexto, ligado && s.chipTextoAtivo]}>
+                  {ligado ? '✓ ' : ''}{o.rotulo}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        <Text style={s.pequeno}>
+          Avisos de antecedência às 9h e, no dia do evento, às 8h.
+        </Text>
+
         <Pressable style={s.botao} onPress={adicionar}>
           <Text style={s.botaoTexto}>Adicionar ao calendário</Text>
         </Pressable>
@@ -333,7 +442,9 @@ function criarEstilos(c: Tema) {
     titulo: { fontSize: 22, fontWeight: '700', color: c.texto },
     subtitulo: { fontSize: 16, fontWeight: '700', color: c.texto, textTransform: 'capitalize' },
     rotulo: { fontWeight: '600', color: c.textoSuave },
+    texto: { color: c.texto },
     suave: { color: c.textoSuave },
+    pequeno: { color: c.textoSuave, fontSize: 12 },
     banner: { padding: 10, borderRadius: 10, fontWeight: '600', overflow: 'hidden' },
     bannerOk: { backgroundColor: c.primariaSuave, color: c.primaria },
     bannerErro: { backgroundColor: c.perigoSuave, color: c.perigo },
@@ -378,6 +489,7 @@ function criarEstilos(c: Tema) {
       borderWidth: 1, borderColor: c.borda, backgroundColor: c.input,
       color: c.texto, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10,
     },
+    inputNumero: { width: 60, textAlign: 'center' },
     linha: { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
     chip: {
       borderWidth: 1, borderColor: c.borda, borderRadius: 20,
