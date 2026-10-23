@@ -32,7 +32,8 @@ type Props = {
 export default function Hoje({ tarefas, eventos, onIrPara }: Props) {
   const c = useTema();
   const s = useMemo(() => criarEstilos(c), [c]);
-const modo = useModoTema();
+  const modo = useModoTema();
+
   const hoje = new Date();
   const chaveHoje = chaveData(hoje);
 
@@ -90,19 +91,19 @@ const modo = useModoTema();
     tarefas.some(t => chaveData(new Date(t.proxima)) === chaveData(d));
 
   async function concluir(t: Tarefa) {
-  if (ocupadoId) return;
-  setOcupadoId(t.id);
-  try {
-    if (foiFeitaHoje(t)) await desfazerTarefaFeita(t);
-    else await marcarTarefaFeita(t);
-    setAviso(null);
-  } catch (e: any) {
-    console.error('Erro ao atualizar tarefa:', e);
-    setAviso(`Não foi possível atualizar a tarefa: ${e?.message ?? e}`);
-  } finally {
-    setOcupadoId(null);
+    if (ocupadoId) return;
+    setOcupadoId(t.id);
+    try {
+      if (foiFeitaHoje(t)) await desfazerTarefaFeita(t);
+      else await marcarTarefaFeita(t);
+      setAviso(null);
+    } catch (e: any) {
+      console.error('Erro ao atualizar tarefa:', e);
+      setAviso(`Não foi possível atualizar a tarefa: ${e?.message ?? e}`);
+    } finally {
+      setOcupadoId(null);
+    }
   }
-}
 
   const dataExtenso = hoje.toLocaleDateString('pt-BR', {
     weekday: 'long', day: 'numeric', month: 'long',
@@ -112,26 +113,27 @@ const modo = useModoTema();
   return (
     <ScrollView contentContainerStyle={s.container}>
       <View style={s.cabecalho}>
-  <View style={s.logo}>
-    <Ionicons name="home" size={20} color={c.primaria} />
-  </View>
-  <View style={{ flex: 1 }}>
-    <Text style={s.app}>Rotina do Lar</Text>
-    <Text style={s.suave}>{dataBonita}</Text>
-  </View>
-  <Pressable
-    style={s.botaoTema}
-    onPress={alternarTema}
-    hitSlop={8}
-    accessibilityLabel="Alternar entre tema claro e escuro"
-  >
-    <Ionicons
-      name={modo === 'claro' ? 'moon-outline' : 'sunny-outline'}
-      size={20}
-      color={c.lavanda}
-    />
-  </Pressable>
-</View>
+        <View style={s.logo}>
+          <Ionicons name="home" size={20} color={c.primaria} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={s.app}>Rotina do Lar</Text>
+          <Text style={s.suave}>{dataBonita}</Text>
+        </View>
+        <Pressable
+          style={s.botaoTema}
+          onPress={alternarTema}
+          hitSlop={8}
+          accessibilityLabel="Alternar entre tema claro e escuro"
+        >
+          <Ionicons
+            name={modo === 'claro' ? 'moon-outline' : 'sunny-outline'}
+            size={20}
+            color={c.lavanda}
+          />
+        </Pressable>
+      </View>
+
       <View style={{ gap: 6 }}>
         <Text style={s.eyebrow}>SEU ESPAÇO, SEU RITMO</Text>
         <Text style={s.manchete}>Vamos organizar{'\n'}seu dia?</Text>
@@ -196,10 +198,11 @@ const modo = useModoTema();
             <View style={{ flex: 1, gap: 4 }}>
               <Text style={[s.itemTitulo, feita && s.riscado]}>{t.nome}</Text>
               <View style={s.linhaPequena}>
-       <View style={[s.etiqueta, { backgroundColor: cor.fundo }]}>
-  <IconeTipo tipo={ev.tipo} cor={cor.texto} />
-  <Text style={[s.etiquetaTexto, { color: cor.texto }]}>{ev.tipo}</Text>
-</View>
+                <View style={[s.etiqueta, { backgroundColor: c.lavandaSuave }]}>
+                  <Text style={[s.etiquetaTexto, { color: c.lavanda }]}>
+                    A cada {t.intervalo} {rotuloUnidade(t.intervalo, t.unidade)}
+                  </Text>
+                </View>
                 {!feita && sit.tipo === 'perigo' && (
                   <Text style={s.atrasada}>{sit.texto}</Text>
                 )}
@@ -224,9 +227,8 @@ const modo = useModoTema();
               <Text style={s.itemTitulo}>{ev.titulo}</Text>
               <View style={s.linhaPequena}>
                 <View style={[s.etiqueta, { backgroundColor: cor.fundo }]}>
-                  <Text style={[s.etiquetaTexto, { color: cor.texto }]}>
-                    {EMOJI[ev.tipo]} {ev.tipo}
-                  </Text>
+                  <IconeTipo tipo={ev.tipo} cor={cor.texto} />
+                  <Text style={[s.etiquetaTexto, { color: cor.texto }]}>{ev.tipo}</Text>
                 </View>
                 {ev.hora ? <Text style={s.suave}>{ev.hora}</Text> : null}
               </View>
@@ -272,9 +274,9 @@ function criarEstilos(c: Tema) {
       borderWidth: 1, borderColor: c.borda,
     },
     botaoTema: {
-  width: 42, height: 42, borderRadius: 21, alignItems: 'center',
-  justifyContent: 'center', backgroundColor: c.lavandaSuave,
-},
+      width: 42, height: 42, borderRadius: 21, alignItems: 'center',
+      justifyContent: 'center', backgroundColor: c.lavandaSuave,
+    },
     app: { fontSize: 16, fontWeight: '700', color: c.texto },
     suave: { color: c.textoSuave },
     pequeno: { color: c.textoSuave, fontSize: 12 },
@@ -320,9 +322,9 @@ function criarEstilos(c: Tema) {
     riscado: { textDecorationLine: 'line-through', color: c.textoSuave },
     linhaPequena: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     etiqueta: {
-  flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start',
-  borderRadius: 12, paddingHorizontal: 10, paddingVertical: 3,
-},
+      flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start',
+      borderRadius: 12, paddingHorizontal: 10, paddingVertical: 3,
+    },
     etiquetaTexto: { fontSize: 12, fontWeight: '700' },
     atrasada: { color: c.perigo, fontSize: 12, fontWeight: '700' },
     cartao: {

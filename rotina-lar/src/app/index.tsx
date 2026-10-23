@@ -6,11 +6,13 @@ import Hoje from '../Hoje';
 import Tarefas from '../Tarefas';
 import Cardapio from '../Cardapio';
 import Calendario from '../Calendario';
+import Mais from '../Mais';
+import Compras from '../Compras';
 import { useEventos } from '../useEventos';
 import { useTarefas } from '../tarefasLogica';
 import { useTema } from '../tema';
 
-type Aba = 'hoje' | 'tarefas' | 'cardapio' | 'calendario';
+type Aba = 'hoje' | 'tarefas' | 'cardapio' | 'calendario' | 'mais' | 'compras';
 type Icone = keyof typeof Ionicons.glyphMap;
 
 const ABAS: { id: Aba; rotulo: string; icone: Icone; iconeAtivo: Icone }[] = [
@@ -18,7 +20,11 @@ const ABAS: { id: Aba; rotulo: string; icone: Icone; iconeAtivo: Icone }[] = [
   { id: 'tarefas', rotulo: 'Tarefas', icone: 'checkmark-circle-outline', iconeAtivo: 'checkmark-circle' },
   { id: 'cardapio', rotulo: 'Cardápio', icone: 'restaurant-outline', iconeAtivo: 'restaurant' },
   { id: 'calendario', rotulo: 'Calendário', icone: 'calendar-outline', iconeAtivo: 'calendar' },
+  { id: 'mais', rotulo: 'Mais', icone: 'grid-outline', iconeAtivo: 'grid' },
 ];
+
+// Telas que ficam dentro do menu "Mais" mantêm essa aba destacada.
+const DENTRO_DE_MAIS: Aba[] = ['mais', 'compras'];
 
 export default function Home() {
   const c = useTema();
@@ -34,6 +40,8 @@ export default function Home() {
         {aba === 'tarefas' && <Tarefas tarefas={tarefas} erro={erroTarefas} />}
         {aba === 'cardapio' && <Cardapio />}
         {aba === 'calendario' && <Calendario eventos={eventos} erro={erroEventos} />}
+        {aba === 'mais' && <Mais onAbrir={setAba} />}
+        {aba === 'compras' && <Compras onVoltar={() => setAba('mais')} />}
       </View>
 
       <View
@@ -43,7 +51,7 @@ export default function Home() {
         ]}
       >
         {ABAS.map(a => {
-          const ativa = aba === a.id;
+          const ativa = a.id === 'mais' ? DENTRO_DE_MAIS.includes(aba) : aba === a.id;
           return (
             <Pressable key={a.id} style={s.aba} onPress={() => setAba(a.id)}>
               <View style={[s.icone, ativa && { backgroundColor: c.primariaSuave }]}>
@@ -67,6 +75,6 @@ export default function Home() {
 const s = StyleSheet.create({
   barra: { flexDirection: 'row', borderTopWidth: 1, paddingTop: 8 },
   aba: { flex: 1, alignItems: 'center', gap: 2 },
-  icone: { paddingHorizontal: 18, paddingVertical: 4, borderRadius: 14 },
+  icone: { paddingHorizontal: 14, paddingVertical: 4, borderRadius: 14 },
   rotulo: { fontSize: 11, fontWeight: '700' },
 });

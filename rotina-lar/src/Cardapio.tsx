@@ -145,38 +145,15 @@ export default function Cardapio() {
       <View style={s.painel}>
         <Text style={s.rotulo}>Dia</Text>
         <View style={s.linha}>
-         {dias.map((d, i) => {
-  const doDia = itens
-    .filter(it => it.data === chave(d))
-    .sort((a, b) => REFEICOES.indexOf(a.refeicao) - REFEICOES.indexOf(b.refeicao));
-  return (
-    <Pressable
-      key={i}
-      onPress={() => {
-        setDiaSel(i);
-        rolagem.current?.scrollTo({ y: 0, animated: true });
-      }}
-      style={[s.card, chave(d) === hoje && s.cardHoje, diaSel === i && s.cardSel]}
-    >
-      <View style={s.cardCabecalho}>
-        <Text style={s.cardTitulo}>{nomeDia(d)}</Text>
-        {diaSel === i && <Text style={s.selecionado}>Dia selecionado</Text>}
-      </View>
-      {doDia.length === 0 && <Text style={s.suave}>Sem refeições cadastradas</Text>}
-      {doDia.map(it => (
-        <View key={it.id} style={s.item}>
-          <Text style={s.itemTexto}>
-            <Text style={s.negrito}>{it.refeicao}: </Text>
-            {it.prato}
-          </Text>
-          <Pressable onPress={() => excluirItem(it.id)} hitSlop={8}>
-            <Text style={s.x}>✕</Text>
-          </Pressable>
-        </View>
-      ))}
-    </Pressable>
-  );
-})}
+          {dias.map((d, i) => (
+            <Pressable
+              key={i}
+              onPress={() => setDiaSel(i)}
+              style={[s.chip, diaSel === i && s.chipAtivo]}
+            >
+              <Text style={[s.chipTexto, diaSel === i && s.chipTextoAtivo]}>{nomeDia(d)}</Text>
+            </Pressable>
+          ))}
         </View>
 
         <Text style={s.rotulo}>Refeição</Text>
@@ -237,8 +214,18 @@ export default function Cardapio() {
           .filter(it => it.data === chave(d))
           .sort((a, b) => REFEICOES.indexOf(a.refeicao) - REFEICOES.indexOf(b.refeicao));
         return (
-          <View key={i} style={[s.card, chave(d) === hoje && s.cardHoje]}>
-            <Text style={s.cardTitulo}>{nomeDia(d)}</Text>
+          <Pressable
+            key={i}
+            onPress={() => {
+              setDiaSel(i);
+              rolagem.current?.scrollTo({ y: 0, animated: true });
+            }}
+            style={[s.card, chave(d) === hoje && s.cardHoje, diaSel === i && s.cardSel]}
+          >
+            <View style={s.cardCabecalho}>
+              <Text style={s.cardTitulo}>{nomeDia(d)}</Text>
+              {diaSel === i && <Text style={s.selecionado}>Dia selecionado</Text>}
+            </View>
             {doDia.length === 0 && <Text style={s.suave}>Sem refeições cadastradas</Text>}
             {doDia.map(it => (
               <View key={it.id} style={s.item}>
@@ -251,7 +238,7 @@ export default function Cardapio() {
                 </Pressable>
               </View>
             ))}
-          </View>
+          </Pressable>
         );
       })}
     </ScrollView>
@@ -296,7 +283,9 @@ function criarEstilos(c: Tema) {
     },
     botao: { backgroundColor: c.primaria, padding: 13, borderRadius: 10, alignItems: 'center' },
     botaoTexto: { color: c.textoPrimaria, fontWeight: '700' },
-    botaoSecundario: { borderWidth: 1, borderColor: c.primaria, padding: 11, borderRadius: 10, alignItems: 'center' },
+    botaoSecundario: {
+      borderWidth: 1, borderColor: c.primaria, padding: 11, borderRadius: 10, alignItems: 'center',
+    },
     botaoSecundarioTexto: { color: c.primaria, fontWeight: '600' },
     card: {
       backgroundColor: c.cartao, borderWidth: 1, borderColor: c.borda,
@@ -304,8 +293,8 @@ function criarEstilos(c: Tema) {
     },
     cardHoje: { borderColor: c.primaria, borderWidth: 2 },
     cardSel: { backgroundColor: c.primariaSuave, borderColor: c.primaria },
-cardCabecalho: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-selecionado: { color: c.primaria, fontSize: 12, fontWeight: '700' },
+    cardCabecalho: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    selecionado: { color: c.primaria, fontSize: 12, fontWeight: '700' },
     cardTitulo: { fontWeight: '700', fontSize: 16, color: c.texto, textTransform: 'capitalize' },
     item: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     itemTexto: { flex: 1, color: c.texto },
