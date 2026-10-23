@@ -1,7 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTema, type Tema } from './tema';
+import { useUsuario, sair } from './auth';
+import { sincronizarLembretesEventos } from './notificacoes';
 
 type Icone = keyof typeof Ionicons.glyphMap;
 
@@ -31,6 +33,23 @@ const ITENS: {
 export default function Mais({ onAbrir }: { onAbrir: (destino: 'compras') => void }) {
   const c = useTema();
   const s = useMemo(() => criarEstilos(c), [c]);
+  const { usuario } = useUsuario();
+  const [confirmandoSair, setConfirmandoSair] = useState(false);
+
+  async function aoSair() {
+    if (!confirmandoSair) {
+      setConfirmandoSair(true);
+      setTimeout(() => setConfirmandoSair(false), 4000);
+      return;
+    }
+    try {
+      // Remove os lembretes de eventos deste aparelho antes de sair.
+      await sincronizarLembretesEventos([]);
+    } catch (e) {
+      console.error('Erro ao limpar lembretes:', e);
+    }
+    await sair();
+  }
 
   return (
     <ScrollView contentContainerStyle={s.container}>
@@ -59,6 +78,22 @@ export default function Mais({ onAbrir }: { onAbrir: (destino: 'compras') => voi
           )}
         </Pressable>
       ))}
+
+      <Text style={s.secao}>Conta</Text>
+      <View style={s.cartao}>
+        <View style={[s.iconeBox, { backgroundColor: c.lavandaSuave }]}>
+          <Ionicons name="person-outline" size={24} color={c.lavanda} />
+        </View>
+        <View style={{ flex: 1, gap: 2 }}>
+          <Text style={s.cartaoTitulo}>Conectada como</Text>
+          <Text style={s.suave}>{usuario?.email ?? ''}</Text>
+        </View>
+      </View>
+      <Pressable style={[s.sair, confirmandoSair && s.sairConfirmar]} onPress={aoSair}>
+        <Text style={confirmandoSair ? s.sairTextoConfirmar : s.sairTexto}>
+          {confirmandoSair ? 'Confirmar?' : 'Sair da conta'}
+        </Text>
+      </Pressable>
     </ScrollView>
   );
 }
@@ -67,6 +102,7 @@ function criarEstilos(c: Tema) {
   return StyleSheet.create({
     container: { padding: 20, paddingBottom: 48, gap: 12 },
     titulo: { fontSize: 22, fontWeight: '700', color: c.texto },
+    secao: { fontSize: 17, fontWeight: '700', color: c.texto, marginTop: 8 },
     suave: { color: c.textoSuave },
     cartao: {
       flexDirection: 'row', alignItems: 'center', gap: 14,
@@ -81,5 +117,12 @@ function criarEstilos(c: Tema) {
     cartaoTitulo: { fontSize: 16, fontWeight: '700', color: c.texto },
     etiqueta: { backgroundColor: c.lavandaSuave, borderRadius: 12, paddingHorizontal: 10, paddingVertical: 3 },
     etiquetaTexto: { color: c.lavanda, fontSize: 12, fontWeight: '700' },
+    sair: {
+      borderWidth: 1, borderColor: c.perigo, padding: 13,
+      borderRadius: 12, alignItems: 'center',
+    },
+    sairConfirmar: { backgroundColor: c.perigo },
+    sairTexto: { color: c.perigo, fontWeight: '700' },
+    sairTextoConfirmar: { color: '#FFFFFF', fontWeight: '700' },
   });
 }
