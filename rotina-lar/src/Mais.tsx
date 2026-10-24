@@ -26,11 +26,11 @@ const ITENS: {
     titulo: 'Gastos do cartão',
     descricao: 'Fatura do mês e parcelas',
     icone: 'card-outline',
-    disponivel: false,
+    disponivel: true,
   },
 ];
 
-export default function Mais({ onAbrir }: { onAbrir: (destino: 'compras') => void }) {
+export default function Mais({ onAbrir }: { onAbrir: (destino: 'compras' | 'gastos') => void }) {
   const c = useTema();
   const s = useMemo(() => criarEstilos(c), [c]);
   const { usuario } = useUsuario();
@@ -59,7 +59,7 @@ export default function Mais({ onAbrir }: { onAbrir: (destino: 'compras') => voi
         <Pressable
           key={item.id}
           disabled={!item.disponivel}
-          onPress={() => item.id === 'compras' && onAbrir('compras')}
+          onPress={() => onAbrir(item.id)}
           style={[s.cartao, !item.disponivel && s.indisponivel]}
         >
           <View style={s.iconeBox}>

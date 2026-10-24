@@ -11,8 +11,9 @@ import Compras from './Compras';
 import { useEventos } from './useEventos';
 import { useTarefas } from './tarefasLogica';
 import { useTema } from './tema';
+import Gastos from './Gastos';
 
-type Aba = 'hoje' | 'tarefas' | 'cardapio' | 'calendario' | 'mais' | 'compras';
+type Aba = 'hoje' | 'tarefas' | 'cardapio' | 'calendario' | 'mais' | 'compras' | 'gastos';
 type Icone = keyof typeof Ionicons.glyphMap;
 
 const ABAS: { id: Aba; rotulo: string; icone: Icone; iconeAtivo: Icone }[] = [
@@ -24,7 +25,7 @@ const ABAS: { id: Aba; rotulo: string; icone: Icone; iconeAtivo: Icone }[] = [
 ];
 
 // Telas que ficam dentro do menu "Mais" mantêm essa aba destacada.
-const DENTRO_DE_MAIS: Aba[] = ['mais', 'compras'];
+const DENTRO_DE_MAIS: Aba[] = ['mais', 'compras', 'gastos'];
 
 export default function Principal() {
   const c = useTema();
@@ -42,6 +43,7 @@ export default function Principal() {
         {aba === 'calendario' && <Calendario eventos={eventos} erro={erroEventos} />}
         {aba === 'mais' && <Mais onAbrir={setAba} />}
         {aba === 'compras' && <Compras onVoltar={() => setAba('mais')} />}
+        {aba === 'gastos' && <Gastos onVoltar={() => setAba('mais')} />}
       </View>
 
       <View
