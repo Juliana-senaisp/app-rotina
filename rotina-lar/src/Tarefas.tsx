@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { View, Text, TextInput, Pressable, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Pressable, FlatList, StyleSheet, Platform } from 'react-native';
 import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
 import { db } from './firebase';
-import { cancelarLembrete, testarEm10Segundos } from './notificacoes';
+import { cancelarLembrete, testarEm10Segundos, contarLembretesAtrasadas } from './notificacoes';
 import {
   UNIDADES, proximaData, hojeAsOito, rotuloUnidade, situacao, foiFeitaHoje,
   reagendar, marcarTarefaFeita, desfazerTarefaFeita, type Tarefa, type Unidade,
@@ -26,6 +26,7 @@ export default function Tarefas({ tarefas, erro }: { tarefas: Tarefa[]; erro: st
   const [intervalo, setIntervalo] = useState('1');
   const [unidade, setUnidade] = useState<Unidade>('semanas');
   const [comecaHoje, setComecaHoje] = useState(true);
+  const [qtdAtrasadas, setQtdAtrasadas] = useState<number | null>(null);
   const [ocupadoId, setOcupadoId] = useState<string | null>(null);
   const [confirmandoId, setConfirmandoId] = useState<string | null>(null);
   const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -70,7 +71,7 @@ export default function Tarefas({ tarefas, erro }: { tarefas: Tarefa[]; erro: st
         (comecaHoje
           ? 'Tarefa adicionada para hoje.'
           : `Tarefa adicionada. Próxima em ${data.toLocaleDateString('pt-BR')}.`) +
-          (lembrete.ok ? '' : ' (O lembrete não pôde ser agendado.)')
+        (lembrete.ok ? '' : ' (O lembrete não pôde ser agendado.)')
       );
     } catch (e: any) {
       console.error('Erro ao adicionar:', e);
@@ -79,27 +80,27 @@ export default function Tarefas({ tarefas, erro }: { tarefas: Tarefa[]; erro: st
   }
 
   async function marcarFeita(t: Tarefa) {
-  if (ocupadoId) return;
-  setOcupadoId(t.id);
-  try {
-    if (foiFeitaHoje(t)) {
-      await desfazerTarefaFeita(t);
-      mostrarMensagem(`"${t.nome}" voltou a ficar pendente.`);
-    } else {
-      const { data, lembreteOk } = await marcarTarefaFeita(t);
-      mostrarMensagem(
-        `Feito! "${t.nome}" – próxima em ${data.toLocaleDateString('pt-BR')}.` +
+    if (ocupadoId) return;
+    setOcupadoId(t.id);
+    try {
+      if (foiFeitaHoje(t)) {
+        await desfazerTarefaFeita(t);
+        mostrarMensagem(`"${t.nome}" voltou a ficar pendente.`);
+      } else {
+        const { data, lembreteOk } = await marcarTarefaFeita(t);
+        mostrarMensagem(
+          `Feito! "${t.nome}" – próxima em ${data.toLocaleDateString('pt-BR')}.` +
           (lembreteOk ? '' : ' (O lembrete não pôde ser agendado.)') +
           ' Toque em "Feito ✓" para desmarcar.'
-      );
+        );
+      }
+    } catch (e: any) {
+      console.error('Erro ao marcar como feita:', e);
+      mostrarMensagem(`Não foi possível atualizar a tarefa: ${e?.message ?? e}`, 'erro');
+    } finally {
+      setOcupadoId(null);
     }
-  } catch (e: any) {
-    console.error('Erro ao marcar como feita:', e);
-    mostrarMensagem(`Não foi possível atualizar a tarefa: ${e?.message ?? e}`, 'erro');
-  } finally {
-    setOcupadoId(null);
   }
-}
 
   async function excluir(t: Tarefa) {
     if (confirmandoId !== t.id) {
@@ -192,9 +193,20 @@ export default function Tarefas({ tarefas, erro }: { tarefas: Tarefa[]; erro: st
         ListHeaderComponent={formulario}
         ListEmptyComponent={<Text style={s.vazio}>Nenhuma tarefa ainda.</Text>}
         ListFooterComponent={
-          <Pressable onPress={testarEm10Segundos}>
-            <Text style={s.linkTeste}>Testar notificação (10s)</Text>
-          </Pressable>
+          <View style={{ gap: 4 }}>
+            <Pressable onPress={testarEm10Segundos}>
+              <Text style={s.linkTeste}>Testar notificação (10s)</Text>
+            </Pressable>
+            {Platform.OS !== 'web' && (
+              <Pressable onPress={async () => setQtdAtrasadas(await contarLembretesAtrasadas())}>
+                <Text style={[s.linkTeste, { marginTop: 8 }]}>
+                  {qtdAtrasadas === null
+                    ? 'Ver avisos de atrasadas agendados'
+                    : `Avisos de atrasadas agendados: ${qtdAtrasadas} (toque para atualizar)`}
+                </Text>
+              </Pressable>
+            )}
+          </View>
         }
         renderItem={({ item }) => {
           const feitaHoje = foiFeitaHoje(item);

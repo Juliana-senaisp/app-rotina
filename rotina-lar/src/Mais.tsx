@@ -3,7 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTema, type Tema } from './tema';
 import { useUsuario, sair } from './auth';
-import { sincronizarLembretesEventos } from './notificacoes';
+import { sincronizarLembretesEventos, sincronizarLembretesAtrasadas } from './notificacoes';
 
 type Icone = keyof typeof Ionicons.glyphMap;
 
@@ -44,7 +44,7 @@ export default function Mais({ onAbrir }: { onAbrir: (destino: 'compras' | 'gast
     }
     try {
       // Remove os lembretes de eventos deste aparelho antes de sair.
-      await sincronizarLembretesEventos([]);
+      await Promise.all([sincronizarLembretesEventos([]), sincronizarLembretesAtrasadas([])]);
     } catch (e) {
       console.error('Erro ao limpar lembretes:', e);
     }

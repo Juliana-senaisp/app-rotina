@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { collection, doc, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
 import { db } from './firebase';
-import { agendarLembrete, cancelarLembrete, prepararNotificacoes } from './notificacoes';
+import {
+  agendarLembrete, cancelarLembrete, prepararNotificacoes, sincronizarLembretesAtrasadas,
+} from './notificacoes';
 
 export type Unidade = 'dias' | 'semanas' | 'meses';
 export type Tarefa = {
@@ -122,10 +124,18 @@ export function useTarefas() {
     return onSnapshot(
       q,
       snap => {
-        setTarefas(
-          snap.docs.map(d => ({ id: d.id, ...(d.data() as Omit<Tarefa, 'id'>) }))
-        );
+        const lista = snap.docs.map(d => ({
+          id: d.id,
+          ...(d.data() as Omit<Tarefa, 'id'>),
+        }));
+        setTarefas(lista);
         setErro(null);
+
+        // Sem conexão, os dados podem vir incompletos: não mexe nos avisos.
+        if (snap.metadata.fromCache) return;
+        prepararNotificacoes()
+          .then(() => sincronizarLembretesAtrasadas(lista))
+          .catch(e => console.error('Notificações:', e));
       },
       e => {
         console.error('Erro ao ler tarefas:', e);

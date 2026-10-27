@@ -58,66 +58,86 @@ export async function testarEm10Segundos() {
 }
 
 // ---------- Lembretes dos eventos do calendário ----------
+// ---------- Lembretes de tarefas atrasadas ----------
 
-const ORIGEM_EVENTO = 'evento';
-const LIMITE_LEMBRETES = 150; // o Android limita a quantidade de alarmes por app
-let fila: Promise<void> = Promise.resolve();
+const ORIGEM_ATRASADAS = 'atrasadas';
+const HORA_ATRASADAS = 9; // horário do aviso diário
+const DIAS_A_FRENTE = 7; // quantos dias à frente ficam agendados
 
-function textoDoLembrete(ev: Evento, diasAntes: number, ocorrencia: Date) {
-  const quando =
-    diasAntes === 0
-      ? 'hoje'
-      : diasAntes === 1
-      ? 'amanhã'
-      : diasAntes === 7
-      ? 'em 1 semana'
-      : `em ${diasAntes} dias`;
-  const data = ocorrencia.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-  const hora = ev.hora ? ` às ${ev.hora}` : '';
-  return `${ev.tipo} ${quando} (${data}${hora})`;
+type TarefaBasica = { nome: string; proxima: number };
+
+function inicioDoDia(d: Date) {
+  const r = new Date(d);
+  r.setHours(0, 0, 0, 0);
+  return r;
 }
 
-async function executarSincronizacao(eventos: Evento[]) {
-  // Remove só os lembretes de eventos e recria a partir dos dados atuais.
+function listaDeNomes(nomes: string[]) {
+  const primeiros = nomes.slice(0, 3);
+  const resto = nomes.length - primeiros.length;
+  if (resto > 0) return `${primeiros.join(', ')} e mais ${resto}`;
+  if (primeiros.length === 1) return primeiros[0];
+  return `${primeiros.slice(0, -1).join(', ')} e ${primeiros[primeiros.length - 1]}`;
+}
+
+async function executarSincronizacaoAtrasadas(tarefas: TarefaBasica[]) {
+  // Remove só os avisos de atrasadas e recria a partir dos dados atuais.
   const agendadas = await Notifications.getAllScheduledNotificationsAsync();
   for (const a of agendadas) {
-    if (a.content.data?.origem === ORIGEM_EVENTO) {
+    if (a.content.data?.origem === ORIGEM_ATRASADAS) {
       await Notifications.cancelScheduledNotificationAsync(a.identifier);
     }
   }
 
-  // Agenda os mais próximos primeiro, respeitando o limite.
   const agora = new Date();
-  const todos = eventos.flatMap(ev => lembretesDe(ev, agora).map(l => ({ ev, l })));
-  todos.sort((a, b) => a.l.quando.getTime() - b.l.quando.getTime());
+  for (let i = 0; i < DIAS_A_FRENTE; i++) {
+    const dia = inicioDoDia(agora);
+    dia.setDate(dia.getDate() + i);
 
-  for (const { ev, l } of todos.slice(0, LIMITE_LEMBRETES)) {
+    const quando = new Date(dia);
+    quando.setHours(HORA_ATRASADAS, 0, 0, 0);
+    if (quando <= agora) continue;
+
+    // Atrasada naquele dia = a data prevista é anterior ao início do dia.
+    const atrasadas = tarefas
+      .filter(t => t.proxima < dia.getTime())
+      .sort((a, b) => a.proxima - b.proxima);
+    if (atrasadas.length === 0) continue;
+
+    let corpo: string;
+    if (atrasadas.length === 1) {
+      const previsto = inicioDoDia(new Date(atrasadas[0].proxima));
+      const dias = Math.round((dia.getTime() - previsto.getTime()) / 86400000);
+      corpo = `"${atrasadas[0].nome}" está atrasada há ${dias} ${dias === 1 ? 'dia' : 'dias'}.`;
+    } else {
+      corpo = `${atrasadas.length} tarefas atrasadas: ${listaDeNomes(atrasadas.map(t => t.nome))}.`;
+    }
+
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: `${EMOJI[ev.tipo]} ${ev.titulo}`,
-        body: textoDoLembrete(ev, l.diasAntes, l.ocorrencia),
-        data: { origem: ORIGEM_EVENTO, eventoId: ev.id },
+        title: atrasadas.length === 1 ? '⏰ Tarefa atrasada' : '⏰ Tarefas atrasadas',
+        body: corpo,
+        data: { origem: ORIGEM_ATRASADAS },
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
-        date: l.quando,
+        date: quando,
         channelId: 'lembretes',
       },
     });
   }
 }
 
-// As sincronizações rodam uma de cada vez, para não duplicar lembretes.
-export function sincronizarLembretesEventos(eventos: Evento[]): Promise<void> {
+export function sincronizarLembretesAtrasadas(tarefas: TarefaBasica[]): Promise<void> {
   if (Platform.OS === 'web') return Promise.resolve();
   fila = fila
-    .then(() => executarSincronizacao(eventos))
-    .catch(erro => console.error('Erro ao sincronizar lembretes:', erro));
+    .then(() => executarSincronizacaoAtrasadas(tarefas))
+    .catch(erro => console.error('Erro ao sincronizar lembretes de atrasadas:', erro));
   return fila;
 }
 
-export async function contarLembretesAgendados(): Promise<number> {
+export async function contarLembretesAtrasadas(): Promise<number> {
   if (Platform.OS === 'web') return 0;
   const todas = await Notifications.getAllScheduledNotificationsAsync();
-  return todas.filter(a => a.content.data?.origem === ORIGEM_EVENTO).length;
+  return todas.filter(a => a.content.data?.origem === ORIGEM_ATRASADAS).length;
 }
