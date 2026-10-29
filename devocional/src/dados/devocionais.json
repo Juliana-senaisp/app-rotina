@@ -1,0 +1,1317 @@
+{
+  "semanas": [
+    {
+      "numero": 1,
+      "tema": "Reencontro",
+      "descricao": "Voltar para perto de Deus sem cobrança: acolher o recomeço."
+    },
+    {
+      "numero": 2,
+      "tema": "Confiança",
+      "descricao": "Aprender a descansar nas mãos de Deus, mesmo sem entender tudo."
+    },
+    {
+      "numero": 3,
+      "tema": "Constância",
+      "descricao": "Transformar o recomeço em hábito: decisão, Palavra, oração e graça."
+    },
+    {
+      "numero": 4,
+      "tema": "Escuta",
+      "descricao": "Reconhecer e responder à voz de Deus no dia a dia."
+    },
+    {
+      "numero": 5,
+      "tema": "Perdão",
+      "descricao": "Receber o perdão de Deus e soltar o que ficou para trás."
+    },
+    {
+      "numero": 6,
+      "tema": "Identidade",
+      "descricao": "Descobrir quem somos em Cristo: filhos amados, escolhidos e com propósito."
+    },
+    {
+      "numero": 7,
+      "tema": "Obediência",
+      "descricao": "Abordagem: confrontar. Quando ouvir vira andar, com sinceridade."
+    },
+    {
+      "numero": 8,
+      "tema": "Conhecendo a Deus",
+      "descricao": "Abordagem: aprender. O caráter de Deus: criador, santo, presente, fiel e amor."
+    }
+  ],
+  "devocionais": [
+    {
+      "id": "s01-d1",
+      "semana": 1,
+      "dia": 1,
+      "ordem": 1,
+      "titulo": "Deus não desistiu de mim",
+      "versiculoRef": "Lucas 15:20",
+      "versiculoTexto": "E, levantando-se, foi para seu pai; e, quando ainda estava longe, viu-o seu pai, e se moveu de íntima compaixão e, correndo, lançou-se-lhe ao pescoço e o beijou.",
+      "passagemRef": "Lucas 15:11-24",
+      "reflexao": "Na parábola, o filho volta esperando ser tratado como empregado, com um discurso ensaiado. O pai nem o deixa terminar: corre, abraça e restaura. Jesus conta essa história para mostrar como Deus reage a quem volta, e o gesto do pai deixa claro que não existe “cheguei tarde demais”. Você não precisa chegar com tudo resolvido; só precisa dar o primeiro passo na direção da casa.",
+      "fraseChave": "Quando ainda estava longe, o pai o viu e correu ao seu encontro.",
+      "perguntas": [
+        "Em que área da vida sinto que me afastei de Deus?",
+        "O que imagino que Ele vai dizer quando eu voltar, e o que a história de Lucas 15 mostra que Ele faz de fato?",
+        "Que primeiro passo simples posso dar hoje na direção dEle?"
+      ],
+      "louvor": {
+        "titulo": "Casa do Pai",
+        "artista": "Aline Barros",
+        "link": "https://www.youtube.com/results?search_query=Casa+do+Pai+Aline+Barros"
+      },
+      "hino": "76 – Vem, ó Pródigo"
+    },
+    {
+      "id": "s01-d2",
+      "semana": 1,
+      "dia": 2,
+      "ordem": 2,
+      "titulo": "Um novo começo é possível",
+      "versiculoRef": "Lamentações 3:22-23",
+      "versiculoTexto": "As misericórdias do Senhor são a causa de não sermos consumidos, porque as suas misericórdias não têm fim; novas são cada manhã; grande é a tua fidelidade.",
+      "passagemRef": "Lamentações 3:22-23",
+      "reflexao": "Lamentações foi escrito num dos momentos mais sombrios da história de Israel, a destruição de Jerusalém. Mesmo ali, o autor lembra que as misericórdias de Deus não acabam e se renovam a cada manhã. Isso significa que cada dia é uma nova oportunidade de recomeçar, sem acumular a culpa dos dias anteriores.",
+      "fraseChave": "Novas são cada manhã as suas misericórdias.",
+      "perguntas": [
+        "Que culpa ou peso do passado ainda carrego como se recomeçar fosse impossível?",
+        "Como seria começar este dia sem carregar os dias que passaram?"
+      ],
+      "louvor": {
+        "titulo": "Ainda Que a Figueira",
+        "artista": "Fernandinho",
+        "link": "https://www.youtube.com/results?search_query=Ainda+Que+a+Figueira+Fernandinho"
+      },
+      "hino": "447 – Nascer de Novo"
+    },
+    {
+      "id": "s01-d3",
+      "semana": 1,
+      "dia": 3,
+      "ordem": 3,
+      "titulo": "Deus quer intimidade",
+      "versiculoRef": "Salmos 27:8",
+      "versiculoTexto": "Quando tu disseste: Buscai a minha face; o meu coração te disse a ti: Buscarei, ó Senhor, a tua face.",
+      "passagemRef": "Salmos 27:7-9",
+      "reflexao": "“Buscar a face” é uma expressão de proximidade: é procurar a presença de alguém, e não apenas pedir algo a essa pessoa. No versículo, Deus convida e o coração responde. Ele não quer só um horário cumprido; quer conversa de verdade, como a de quem conhece e ama.",
+      "fraseChave": "Buscarei, ó Senhor, a tua face.",
+      "perguntas": [
+        "Minha oração tem sido mais uma obrigação ou uma conversa com alguém que me ama?",
+        "O que me ajudaria a conversar com Deus de forma mais natural, do jeito que eu sou?"
+      ],
+      "louvor": {
+        "titulo": "Tua Graça Me Basta",
+        "artista": "Davi Sacer",
+        "link": "https://www.youtube.com/results?search_query=Tua+Gra%C3%A7a+Me+Basta+Davi+Sacer"
+      },
+      "hino": "187 – Mais Perto Meu Deus de Ti!"
+    },
+    {
+      "id": "s01-d4",
+      "semana": 1,
+      "dia": 4,
+      "ordem": 4,
+      "titulo": "A Palavra como alimento",
+      "versiculoRef": "Mateus 4:4",
+      "versiculoTexto": "Ele, porém, respondendo, disse: Está escrito: Nem só de pão viverá o homem, mas de toda a palavra que sai da boca de Deus.",
+      "passagemRef": "Mateus 4:1-4 / Salmos 119:103-105",
+      "reflexao": "Jesus responde à tentação no deserto citando as Escrituras e lembrando que o ser humano precisa da Palavra de Deus tanto quanto de comida. Alimento não é tarefa: lemos para ser sustentados, não para cumprir uma lista. Ao ler, vale perguntar não só “o que eu preciso fazer?”, mas “o que isso mostra sobre quem Deus é?”.",
+      "fraseChave": "Nem só de pão viverá o homem.",
+      "perguntas": [
+        "Como tenho lido a Bíblia: como tarefa ou como alimento?",
+        "O que a passagem de hoje me mostra sobre quem Deus é?",
+        "Qual versículo quero levar comigo hoje?"
+      ],
+      "louvor": {
+        "titulo": "Salmo 119 (Lâmpada Para os Meus Pés)",
+        "artista": "Voz da Verdade",
+        "link": "https://www.youtube.com/results?search_query=Salmo+119+%28L%C3%A2mpada+Para+os+Meus+P%C3%A9s%29+Voz+da+Verdade"
+      },
+      "hino": "328 – O Pão da Vida"
+    },
+    {
+      "id": "s01-d5",
+      "semana": 1,
+      "dia": 5,
+      "ordem": 5,
+      "titulo": "Descanso para os cansados",
+      "versiculoRef": "Mateus 11:28",
+      "versiculoTexto": "Vinde a mim, todos os que estais cansados e oprimidos, e eu vos aliviarei.",
+      "passagemRef": "Mateus 11:28-30",
+      "reflexao": "Jesus fala a pessoas exaustas por tentarem dar conta de tudo, inclusive da própria religião. O convite não é “se esforce mais”, é “vinde a mim”. Voltar para Deus não deveria ser mais um peso na lista de tarefas, e sim o lugar onde o cansaço encontra alívio. O “jugo suave” fala de caminhar junto com Ele, e não sozinha.",
+      "fraseChave": "Vinde a mim, e eu vos aliviarei.",
+      "perguntas": [
+        "O que tenho carregado sozinha que posso entregar a Deus hoje?",
+        "O que mudaria se eu enxergasse o tempo com Deus como descanso, e não como obrigação?"
+      ],
+      "louvor": {
+        "titulo": "Descanso",
+        "artista": "Isaías Saad",
+        "link": "https://www.youtube.com/results?search_query=Descanso+Isa%C3%ADas+Saad"
+      },
+      "hino": "246 – O Descanso em Jesus"
+    },
+    {
+      "id": "s01-d6",
+      "semana": 1,
+      "dia": 6,
+      "ordem": 6,
+      "titulo": "Perseverança começa pequena",
+      "versiculoRef": "Zacarias 4:10",
+      "versiculoTexto": "Porque, quem despreza o dia das coisas pequenas?",
+      "passagemRef": "Zacarias 4:6-10",
+      "reflexao": "Zacarias fala a um povo que reconstruía o templo com poucos recursos e se sentia desanimado diante do que era pequeno. Deus lembra que começos modestos têm valor e que a obra não depende só de força humana. O mesmo vale para o hábito que você está reconstruindo: cinco minutos sinceros já são um recomeço de verdade.",
+      "fraseChave": "Não despreze o dia das coisas pequenas.",
+      "perguntas": [
+        "Que passo pequeno e possível posso dar nesta semana (horário, tempo, lugar)?",
+        "O que me desanima quando comparo meu começo com o que eu gostaria de já ter?"
+      ],
+      "louvor": {
+        "titulo": "Fiel é Deus",
+        "artista": "Isaías Saad (part. Julliany Souza e Léo Brandão)",
+        "link": "https://www.youtube.com/results?search_query=Fiel+%C3%A9+Deus+Isa%C3%ADas+Saad"
+      },
+      "hino": "310 – Avante Eu Vou"
+    },
+    {
+      "id": "s01-d7",
+      "semana": 1,
+      "dia": 7,
+      "ordem": 7,
+      "titulo": "Gratidão pelo recomeço",
+      "versiculoRef": "Salmos 103:2",
+      "versiculoTexto": "Bendize, ó minha alma, ao Senhor, e não te esqueças de nenhum de seus benefícios.",
+      "passagemRef": "Salmos 103:1-5",
+      "reflexao": "Davi manda a própria alma não esquecer os benefícios de Deus e depois os enumera: perdão, cura, redenção, bondade. Gratidão é um exercício de memória: olhar para trás e reconhecer o cuidado que já aconteceu. Ao fechar a primeira semana, notar o que mudou ajuda a seguir com mais confiança.",
+      "fraseChave": "Não te esqueças de nenhum de seus benefícios.",
+      "perguntas": [
+        "Quais 3 coisas me deixam grata nesta primeira semana de volta?",
+        "Que oração livre de agradecimento quero escrever hoje?"
+      ],
+      "louvor": {
+        "titulo": "Bondade de Deus",
+        "artista": "Isaías Saad",
+        "link": "https://www.youtube.com/results?search_query=Bondade+de+Deus+Isa%C3%ADas+Saad"
+      },
+      "hino": "564 – Conta as Bênçãos"
+    },
+    {
+      "id": "s02-d1",
+      "semana": 2,
+      "dia": 1,
+      "ordem": 8,
+      "titulo": "Confiar mesmo sem entender",
+      "versiculoRef": "Provérbios 3:5",
+      "versiculoTexto": "Confia no Senhor de todo o teu coração e não te estribes no teu próprio entendimento.",
+      "passagemRef": "Provérbios 3:5-6",
+      "reflexao": "O texto contrapõe confiar de todo o coração e apoiar-se no próprio entendimento. Confiar não é ter todas as respostas; é entregar o que você não entende a quem entende. O versículo 6 completa: ao reconhecer Deus em todos os caminhos, Ele endireita as veredas. A promessa não é um caminho sem curvas, e sim companhia e direção.",
+      "fraseChave": "Não te estribes no teu próprio entendimento.",
+      "perguntas": [
+        "O que estou tentando controlar sozinha, em vez de confiar a Deus?",
+        "O que sinto quando penso em soltar isso?",
+        "Se eu confiasse plenamente hoje, o que mudaria na minha atitude?"
+      ],
+      "louvor": {
+        "titulo": "Deus no Controle",
+        "artista": "Eyshila",
+        "link": "https://www.youtube.com/results?search_query=Deus+no+Controle+Eyshila"
+      },
+      "hino": "107 – Firme nas Promessas"
+    },
+    {
+      "id": "s02-d2",
+      "semana": 2,
+      "dia": 2,
+      "ordem": 9,
+      "titulo": "Um Pai que cuida dos detalhes",
+      "versiculoRef": "Mateus 6:26",
+      "versiculoTexto": "Olhai para as aves do céu, que não semeiam, nem segam, nem ajuntam em celeiros; e vosso Pai celestial as alimenta. Não valeis vós muito mais do que elas?",
+      "passagemRef": "Mateus 6:25-34",
+      "reflexao": "Jesus fala sobre ansiedade olhando para aves e flores, criaturas que Deus sustenta todos os dias sem que elas se preocupem. O argumento é de valor: se Deus cuida delas, quanto mais de você. Ele não diz que os problemas não existem; diz que a preocupação não os resolve e que há um Pai que sabe do que você precisa.",
+      "fraseChave": "Não valeis vós muito mais do que elas?",
+      "perguntas": [
+        "O que está me deixando ansiosa hoje?",
+        "Lembro de alguma vez em que Deus cuidou de um detalhe pequeno da minha vida?",
+        "O que significaria, na prática, entregar essa ansiedade a Ele hoje?"
+      ],
+      "louvor": {
+        "titulo": "Deus Cuida de Mim",
+        "artista": "Aline Barros",
+        "link": "https://www.youtube.com/results?search_query=Deus+Cuida+de+Mim+Aline+Barros"
+      },
+      "hino": "61 – Deus Tomará Conta de Ti"
+    },
+    {
+      "id": "s02-d3",
+      "semana": 2,
+      "dia": 3,
+      "ordem": 10,
+      "titulo": "Tudo coopera para o bem",
+      "versiculoRef": "Romanos 8:28",
+      "versiculoTexto": "E sabemos que todas as coisas contribuem juntamente para o bem daqueles que amam a Deus, daqueles que são chamados segundo o seu propósito.",
+      "passagemRef": "Romanos 8:28",
+      "reflexao": "Paulo não diz que tudo o que acontece é bom, mas que Deus é capaz de usar tudo, até o difícil, para um bem maior na vida de quem o ama. Essa promessa não apaga a dor; dá sentido a ela. Nem sempre é possível enxergar esse bem no momento, e muitas vezes só olhando para trás.",
+      "fraseChave": "Todas as coisas contribuem juntamente para o bem.",
+      "perguntas": [
+        "Existe uma dificuldade recente que ainda não consigo enxergar com outros olhos?",
+        "Olhando para trás, consigo ver algo difícil que Deus transformou em bem?"
+      ],
+      "louvor": {
+        "titulo": "Todas as Coisas",
+        "artista": "Fernandinho",
+        "link": "https://www.youtube.com/results?search_query=Todas+as+Coisas+Fernandinho"
+      },
+      "hino": "242 – Eu Confio Firmemente"
+    },
+    {
+      "id": "s02-d4",
+      "semana": 2,
+      "dia": 4,
+      "ordem": 11,
+      "titulo": "Uma identidade que não depende de mim",
+      "versiculoRef": "2 Coríntios 5:17",
+      "versiculoTexto": "Assim que, se alguém está em Cristo, nova criatura é; as coisas velhas já passaram; eis que tudo se fez novo.",
+      "passagemRef": "2 Coríntios 5:16-21",
+      "reflexao": "Paulo afirma que quem está em Cristo é nova criatura. A identidade deixa de ser definida pelos erros do passado ou pela opinião dos outros e passa a ser definida pelo que Cristo fez. Isso não é um esforço de pensamento positivo; é uma declaração sobre o que Deus já realizou.",
+      "fraseChave": "Eis que tudo se fez novo.",
+      "perguntas": [
+        "O que costumo usar para definir quem eu sou (aparência, desempenho, opinião dos outros)?",
+        "O que muda quando me vejo como nova criatura, e não só pelos meus erros?",
+        "O que preciso deixar para trás para viver essa identidade hoje?"
+      ],
+      "louvor": {
+        "titulo": "Renova-me",
+        "artista": "Aline Barros",
+        "link": "https://www.youtube.com/results?search_query=Renova-me+Aline+Barros"
+      },
+      "hino": "116 – Livre Estou"
+    },
+    {
+      "id": "s02-d5",
+      "semana": 2,
+      "dia": 5,
+      "ordem": 12,
+      "titulo": "Força que aparece na fraqueza",
+      "versiculoRef": "2 Coríntios 12:9",
+      "versiculoTexto": "E disse-me: A minha graça te basta, porque o meu poder se aperfeiçoa na fraqueza.",
+      "passagemRef": "2 Coríntios 12:7-10",
+      "reflexao": "Paulo pediu a Deus que removesse algo que o incomodava, e a resposta foi: “a minha graça te basta”. Em vez de tirar a fraqueza, Deus se mostrou suficiente dentro dela. Isso muda a pergunta: não é “como escondo minha fraqueza?”, e sim “como a graça de Deus me sustenta nela?”. Pedir ajuda não é falta de fé.",
+      "fraseChave": "A minha graça te basta.",
+      "perguntas": [
+        "Onde estou me sentindo fraca ou cansada hoje?",
+        "Como seria pedir ajuda em vez de tentar dar conta sozinha?"
+      ],
+      "louvor": {
+        "titulo": "Tudo Posso",
+        "artista": "Eyshila",
+        "link": "https://www.youtube.com/results?search_query=Tudo+Posso+Eyshila"
+      },
+      "hino": "267 – Jesus Minha Força"
+    },
+    {
+      "id": "s02-d6",
+      "semana": 2,
+      "dia": 6,
+      "ordem": 13,
+      "titulo": "Esperar no tempo certo",
+      "versiculoRef": "Isaías 40:31",
+      "versiculoTexto": "Mas os que esperam no Senhor renovarão as forças, subirão com asas como águias; correrão, e não se cansarão; caminharão, e não se fatigarão.",
+      "passagemRef": "Eclesiastes 3:1-8 / Isaías 40:28-31",
+      "reflexao": "Em hebraico, “esperar” no Senhor traz a ideia de depositar nele a expectativa, e não de ficar parado. Isaías fala a um povo cansado do exílio e promete renovo de forças. O tempo de Deus nem sempre é o nosso, mas Eclesiastes lembra que há um tempo certo para cada coisa. Esperar com confiança é diferente de esperar com ansiedade.",
+      "fraseChave": "Os que esperam no Senhor renovarão as forças.",
+      "perguntas": [
+        "O que estou tendo dificuldade de esperar agora?",
+        "Estou lutando contra essa espera ou descansando nela?",
+        "O que posso fazer hoje, em vez de apenas esperar passivamente?"
+      ],
+      "louvor": {
+        "titulo": "O Tempo de Deus",
+        "artista": "Rose Nascimento",
+        "link": "https://www.youtube.com/results?search_query=O+Tempo+de+Deus+Rose+Nascimento"
+      },
+      "hino": "575 – Espero em Ti"
+    },
+    {
+      "id": "s02-d7",
+      "semana": 2,
+      "dia": 7,
+      "ordem": 14,
+      "titulo": "Gratidão que fortalece a fé",
+      "versiculoRef": "Salmos 34:1",
+      "versiculoTexto": "Louvarei ao Senhor em todo o tempo; o seu louvor estará continuamente na minha boca.",
+      "passagemRef": "Salmos 34:1-8",
+      "reflexao": "Davi escreve este salmo depois de ter sido livrado de uma situação de grande perigo, e começa com louvor. Lembrar do que Deus fez fortalece a confiança para o que vem pela frente. Registrar os momentos da semana em que você percebeu o cuidado dEle, mesmo os pequenos, ajuda a construir memória de fé.",
+      "fraseChave": "Louvarei ao Senhor em todo o tempo.",
+      "perguntas": [
+        "Quais foram 3 momentos desta semana em que percebi a mão de Deus, mesmo que pequenos?",
+        "O que mudou na minha confiança do início da semana até hoje?"
+      ],
+      "louvor": {
+        "titulo": "Grande É o Senhor",
+        "artista": "Adhemar de Campos",
+        "link": "https://www.youtube.com/results?search_query=Grande+%C3%89+o+Senhor+Adhemar+de+Campos"
+      },
+      "hino": "370 – Grato a Ti"
+    },
+    {
+      "id": "s03-d1",
+      "semana": 3,
+      "dia": 1,
+      "ordem": 15,
+      "titulo": "Um hábito começa com decisão",
+      "versiculoRef": "Josué 24:15",
+      "versiculoTexto": "Escolhei hoje a quem sirvais (...); porém eu e a minha casa serviremos ao Senhor.",
+      "passagemRef": "Josué 24:14-15",
+      "reflexao": "Josué põe o povo diante de uma escolha explícita e declara a sua: servir ao Senhor, ele e a sua casa. Constância começa com uma decisão que se renova todos os dias, e não com um sentimento. Haverá dias sem vontade; o que sustenta é a escolha feita antes.",
+      "fraseChave": "Escolhei hoje a quem sirvais.",
+      "perguntas": [
+        "O que decido hoje, independentemente de como vou me sentir amanhã?",
+        "O que costuma me fazer desistir de um hábito novo depois de poucos dias?",
+        "Que pequena decisão, tomada hoje, pode sustentar esta semana inteira?"
+      ],
+      "louvor": {
+        "titulo": "Eu Escolho Deus",
+        "artista": "Thalles Roberto",
+        "link": "https://www.youtube.com/results?search_query=Eu+Escolho+Deus+Thalles+Roberto"
+      },
+      "hino": "201 – A Decisão"
+    },
+    {
+      "id": "s03-d2",
+      "semana": 3,
+      "dia": 2,
+      "ordem": 16,
+      "titulo": "Buscar antes de qualquer coisa",
+      "versiculoRef": "Mateus 6:33",
+      "versiculoTexto": "Mas, buscai primeiro o Reino de Deus, e a sua justiça, e todas estas coisas vos serão acrescentadas.",
+      "passagemRef": "Mateus 6:31-34",
+      "reflexao": "Jesus fala de prioridade: buscar primeiro o Reino e a justiça de Deus e confiar que o restante será cuidado. “Primeiro” é uma questão de ordem, não de tempo gasto. Colocar o momento com Deus antes das notificações do celular costuma mudar o tom do dia inteiro.",
+      "fraseChave": "Buscai primeiro o Reino de Deus.",
+      "perguntas": [
+        "O que costuma vir antes de Deus na minha rotina da manhã?",
+        "O que preciso reorganizar no dia para dar esse espaço?"
+      ],
+      "louvor": {
+        "titulo": "Prioridade",
+        "artista": "Midian Lima",
+        "link": "https://www.youtube.com/results?search_query=Prioridade+Midian+Lima"
+      },
+      "hino": "77 – Guarda o Contacto"
+    },
+    {
+      "id": "s03-d3",
+      "semana": 3,
+      "dia": 3,
+      "ordem": 17,
+      "titulo": "A Palavra que sustenta",
+      "versiculoRef": "Salmos 1:3",
+      "versiculoTexto": "Pois será como a árvore plantada junto a ribeiros de águas, que dá o seu fruto no seu tempo; as suas folhas não cairão, e tudo quanto fizer prosperará.",
+      "passagemRef": "Salmos 1:1-3 / Salmos 119:105",
+      "reflexao": "O Salmo 1 compara quem medita na Palavra a uma árvore plantada junto a ribeiros: a raiz alcança água constante, e por isso o fruto vem no tempo certo. Constância na Palavra produz raiz antes de produzir resultado visível. Meditar é voltar ao texto, repetir, perguntar, em vez de só ler e passar.",
+      "fraseChave": "Será como a árvore plantada junto a ribeiros de águas.",
+      "perguntas": [
+        "Qual versículo desta semana quero carregar comigo, e não só ler e esquecer?",
+        "O que essa passagem me diz sobre quem Deus é, além do que preciso fazer?",
+        "Onde sinto falta de raiz, de algo firme que me sustente?"
+      ],
+      "louvor": {
+        "titulo": "Salmo 119: 105 a 112",
+        "artista": "Novo Tempo",
+        "link": "https://www.youtube.com/results?search_query=Salmo+119%3A+105+a+112+Novo+Tempo"
+      },
+      "hino": "306 – A Palavra de Deus é um Tesouro"
+    },
+    {
+      "id": "s03-d4",
+      "semana": 3,
+      "dia": 4,
+      "ordem": 18,
+      "titulo": "Oração como respiração diária",
+      "versiculoRef": "1 Tessalonicenses 5:17",
+      "versiculoTexto": "Orai sem cessar.",
+      "passagemRef": "1 Tessalonicenses 5:16-18",
+      "reflexao": "“Orai sem cessar” não pede uma oração ininterrupta com palavras, e sim uma atitude de contato aberto com Deus ao longo do dia. Uma frase curta no trânsito, antes de uma conversa difícil ou diante de uma notícia já é oração. O horário fixo continua importante, mas a oração não precisa terminar quando ele acaba.",
+      "fraseChave": "Orai sem cessar.",
+      "perguntas": [
+        "Em que momentos do dia eu poderia lembrar de orar, além do horário fixo?",
+        "O que costuma ocupar o lugar da oração quando estou ansiosa ou apressada?",
+        "Que frase curta de oração posso levar comigo hoje?"
+      ],
+      "louvor": {
+        "titulo": "Preciso de Ti",
+        "artista": "Diante do Trono",
+        "link": "https://www.youtube.com/results?search_query=Preciso+de+Ti+Diante+do+Trono"
+      },
+      "hino": "577 – Em Fervente Oração"
+    },
+    {
+      "id": "s03-d5",
+      "semana": 3,
+      "dia": 5,
+      "ordem": 19,
+      "titulo": "Disciplina com graça, não com peso",
+      "versiculoRef": "Hebreus 12:11",
+      "versiculoTexto": "E, na verdade, toda correção, ao presente, não parece ser de gozo, senão de tristeza, mas, depois, produz um fruto pacífico de justiça nos exercitados por ela.",
+      "passagemRef": "Hebreus 12:5-11",
+      "reflexao": "O texto fala de correção e treino: no momento não parece alegre, mas depois produz fruto de paz. O foco não é desempenho, é crescimento. Disciplina espiritual não serve para merecer o amor de Deus, que já é dado; serve para criar condições de intimidade. Quando falhar, o caminho é recomeçar com graça, não desistir com culpa.",
+      "fraseChave": "Depois produz um fruto pacífico de justiça.",
+      "perguntas": [
+        "Quando falho num dia de devocional, o que vem primeiro: culpa ou graça?",
+        "Como seria recomeçar amanhã sem carregar o peso de hoje?"
+      ],
+      "louvor": {
+        "titulo": "Graça",
+        "artista": "Aline Barros",
+        "link": "https://www.youtube.com/results?search_query=Gra%C3%A7a+Aline+Barros"
+      },
+      "hino": "79 – Sua Graça Me Basta"
+    },
+    {
+      "id": "s03-d6",
+      "semana": 3,
+      "dia": 6,
+      "ordem": 20,
+      "titulo": "Construir sobre a rocha",
+      "versiculoRef": "Mateus 7:24",
+      "versiculoTexto": "Todo aquele, pois, que escuta estas minhas palavras e as pratica, assemelhá-lo-ei ao homem prudente, que edificou a sua casa sobre a rocha.",
+      "passagemRef": "Mateus 7:24-27",
+      "reflexao": "No fim do Sermão do Monte, Jesus compara duas casas: ambas enfrentam a mesma tempestade, mas só a construída sobre a rocha permanece. A diferença não está em ouvir, pois os dois ouvem, e sim em praticar. O hábito diário é essa prática: pequena, repetida e invisível, mas que sustenta quando a tempestade chega.",
+      "fraseChave": "Edificou a sua casa sobre a rocha.",
+      "perguntas": [
+        "O que estou construindo com esses passos: uma casa sobre a rocha ou sobre a areia?",
+        "Que tempestade já testou minha fé antes, e o que me sustentou?",
+        "O que quero que seja verdade sobre mim quando a próxima tempestade chegar?"
+      ],
+      "louvor": {
+        "titulo": "Deus É Deus",
+        "artista": "Delino Marçal",
+        "link": "https://www.youtube.com/results?search_query=Deus+%C3%89+Deus+Delino+Mar%C3%A7al"
+      },
+      "hino": "258 – Na Rocha Eterna Firmado"
+    },
+    {
+      "id": "s03-d7",
+      "semana": 3,
+      "dia": 7,
+      "ordem": 21,
+      "titulo": "Celebrar o progresso",
+      "versiculoRef": "Filipenses 1:6",
+      "versiculoTexto": "Tendo por certo isto mesmo: que aquele que em vós começou a boa obra a aperfeiçoará até ao dia de Jesus Cristo.",
+      "passagemRef": "Filipenses 1:3-6",
+      "reflexao": "Paulo escreve com gratidão a uma comunidade e afirma a confiança de que Deus, que iniciou a obra, vai completá-la. Isso tira o peso de achar que tudo depende do seu esforço. Três semanas não formam um hábito perfeito, mas formam um caminho real, e vale reconhecer e celebrar o que já mudou.",
+      "fraseChave": "Aquele que começou a boa obra a aperfeiçoará.",
+      "perguntas": [
+        "Olhando para estas três semanas, o que já mudou na forma como busco a Deus?",
+        "Que dia foi mais difícil de manter o hábito, e o que aprendi com ele?",
+        "Que oração de gratidão quero escrever para fechar esta semana?"
+      ],
+      "louvor": {
+        "titulo": "Grandes Coisas",
+        "artista": "Fernandinho",
+        "link": "https://www.youtube.com/results?search_query=Grandes+Coisas+Fernandinho"
+      },
+      "hino": "596 – Gratidão"
+    },
+    {
+      "id": "s04-d1",
+      "semana": 4,
+      "dia": 1,
+      "ordem": 22,
+      "titulo": "Deus ainda fala hoje",
+      "versiculoRef": "1 Reis 19:12",
+      "versiculoTexto": "E, depois do terremoto, um fogo; mas o Senhor não estava no fogo; e, depois do fogo, uma voz mansa e delicada.",
+      "passagemRef": "1 Reis 19:9-13",
+      "reflexao": "Elias esperava ouvir Deus no vento forte, no terremoto ou no fogo, mas a voz veio numa brisa suave. Nem sempre Deus fala como esperamos, e é fácil perder a voz mansa no meio do barulho. Aprender a ouvir começa por reconhecer que Ele ainda fala e por criar espaço para perceber.",
+      "fraseChave": "Depois do fogo, uma voz mansa e delicada.",
+      "perguntas": [
+        "Nos últimos dias, em que momentos simples posso ter ignorado uma voz suave?",
+        "O que costuma me distrair a ponto de não perceber Deus falando?",
+        "Como seria criar mais espaço de silêncio no meu dia?"
+      ],
+      "louvor": {
+        "titulo": "Deus Fala Comigo",
+        "artista": "Marcelo Nascimento",
+        "link": "https://www.youtube.com/results?search_query=Deus+Fala+Comigo+Marcelo+Nascimento"
+      },
+      "hino": "210 – Fala, Fala, Senhor"
+    },
+    {
+      "id": "s04-d2",
+      "semana": 4,
+      "dia": 2,
+      "ordem": 23,
+      "titulo": "Reconhecer a voz do Pastor",
+      "versiculoRef": "João 10:27",
+      "versiculoTexto": "As minhas ovelhas ouvem a minha voz, e eu conheço-as, e elas seguem-me.",
+      "passagemRef": "João 10:1-5, 27",
+      "reflexao": "Jesus descreve o pastor que chama as ovelhas pelo nome, e elas reconhecem a voz dele porque convivem com ele. Reconhecer a voz de Deus é fruto de convivência, não de talento. Quanto mais tempo na Palavra e na oração, mais fácil distinguir a voz dEle de medo, pressa ou opinião alheia.",
+      "fraseChave": "As minhas ovelhas ouvem a minha voz.",
+      "perguntas": [
+        "O que me ajuda a distinguir a voz de Deus de outras vozes (medo, pressa, opinião dos outros)?",
+        "O que posso fazer esta semana para conviver mais com Ele?"
+      ],
+      "louvor": {
+        "titulo": "Fala Comigo",
+        "artista": "Eyshila",
+        "link": "https://www.youtube.com/results?search_query=Fala+Comigo+Eyshila"
+      },
+      "hino": "209 – A Voz do Bom Pastor"
+    },
+    {
+      "id": "s04-d3",
+      "semana": 4,
+      "dia": 3,
+      "ordem": 24,
+      "titulo": "Silêncio para ouvir",
+      "versiculoRef": "Salmos 46:10",
+      "versiculoTexto": "Aquietai-vos, e sabei que eu sou Deus; serei exaltado entre as nações; serei exaltado sobre a terra.",
+      "passagemRef": "Salmos 46:1-11",
+      "reflexao": "O salmo fala de tumulto, montes que tremem e nações em agitação, e no meio disso vem a ordem de aquietar-se. Silêncio, aqui, não é vazio: é confiança de que Deus é Deus mesmo quando tudo balança. Alguns minutos sem tela e sem música já criam espaço para escutar.",
+      "fraseChave": "Aquietai-vos, e sabei que eu sou Deus.",
+      "perguntas": [
+        "Consigo separar hoje alguns minutos sem tela, sem música, só diante de Deus?",
+        "O que costuma preencher meu silêncio (ansiedade, planos, distrações)?",
+        "O que sinto quando realmente paro por alguns minutos?"
+      ],
+      "louvor": {
+        "titulo": "Aquieta Minh'alma",
+        "artista": "Ministério Zoe",
+        "link": "https://www.youtube.com/results?search_query=Aquieta+Minh%27alma+Minist%C3%A9rio+Zoe"
+      },
+      "hino": "578 – Sossegai!"
+    },
+    {
+      "id": "s04-d4",
+      "semana": 4,
+      "dia": 4,
+      "ordem": 25,
+      "titulo": "A Palavra confirma o que ouvimos",
+      "versiculoRef": "Isaías 30:21",
+      "versiculoTexto": "Quando vos desviardes para a direita, ou quando vos desviardes para a esquerda, os vossos ouvidos ouvirão atrás de vós uma palavra, dizendo: Este é o caminho; andai por ele.",
+      "passagemRef": "Isaías 30:19-21 / João 8:47",
+      "reflexao": "Isaías promete que o povo ouviria uma palavra atrás de si indicando o caminho. Mas essa direção nunca contradiz o que Deus já revelou nas Escrituras. Por isso a Bíblia funciona como teste: quando sentimos que Deus está falando algo, vale confrontar a impressão com o que o texto realmente diz.",
+      "fraseChave": "Este é o caminho; andai por ele.",
+      "perguntas": [
+        "Existe alguma impressão recente que eu deveria confrontar com o que a Bíblia realmente diz?",
+        "Como tenho usado a leitura bíblica para confirmar ou corrigir o que sinto que Deus disse?"
+      ],
+      "louvor": {
+        "titulo": "A Tua Palavra",
+        "artista": "Sued Silva",
+        "link": "https://www.youtube.com/results?search_query=A+Tua+Palavra+Sued+Silva"
+      },
+      "hino": "505 – As Palavras de Jesus"
+    },
+    {
+      "id": "s04-d5",
+      "semana": 4,
+      "dia": 5,
+      "ordem": 26,
+      "titulo": "Obediência ao que se ouve",
+      "versiculoRef": "1 Samuel 3:9",
+      "versiculoTexto": "Pelo que Eli disse a Samuel: Vai deitar-te; e será que, se te chamar, dirás: Fala, Senhor, porque o teu servo ouve.",
+      "passagemRef": "1 Samuel 3:1-10",
+      "reflexao": "Samuel era jovem, servia no templo e ainda não reconhecia a voz de Deus. Foi Eli quem o orientou: se chamar de novo, responda “Fala, Senhor, porque o teu servo ouve”. A disposição de ouvir veio antes do entendimento completo. Muitas vezes a clareza cresce à medida que respondemos ao que já entendemos.",
+      "fraseChave": "Fala, Senhor, porque o teu servo ouve.",
+      "perguntas": [
+        "Existe algo que já ouvi e ainda não coloquei em prática por medo ou dúvida?",
+        "O que me impede de responder “eis-me aqui” mais rápido?",
+        "Qual seria meu primeiro passo de obediência hoje, mesmo pequeno?"
+      ],
+      "louvor": {
+        "titulo": "Eis-me Aqui",
+        "artista": "Cassiane",
+        "link": "https://www.youtube.com/results?search_query=Eis-me+Aqui+Cassiane"
+      },
+      "hino": "217 – Ouve Sua Voz"
+    },
+    {
+      "id": "s04-d6",
+      "semana": 4,
+      "dia": 6,
+      "ordem": 27,
+      "titulo": "Discernindo em meio ao barulho",
+      "versiculoRef": "Romanos 12:2",
+      "versiculoTexto": "E não vos conformeis com este mundo, mas transformai-vos pela renovação do vosso entendimento, para que experimenteis qual seja a boa, agradável e perfeita vontade de Deus.",
+      "passagemRef": "Romanos 12:1-2",
+      "reflexao": "Paulo contrasta conformar-se ao mundo com ser transformado pela renovação da mente, e o resultado é conseguir discernir a vontade de Deus. Discernimento é treino: quanto mais a mente é alimentada pela Palavra e menos pelo ruído constante, mais fácil identificar o que vem de Deus. Redes sociais, comparação e ansiedade falam alto e merecem atenção.",
+      "fraseChave": "Transformai-vos pela renovação do vosso entendimento.",
+      "perguntas": [
+        "Que vozes (redes sociais, comparação, ansiedade) tenho deixado falar mais alto que a de Deus?",
+        "O que posso reduzir esta semana para dar mais espaço à mente renovada?",
+        "Como sei, na prática, se um pensamento vem de Deus ou só do barulho ao redor?"
+      ],
+      "louvor": {
+        "titulo": "Romanos 12",
+        "artista": "Fraternidade São João Paulo II",
+        "link": "https://www.youtube.com/results?search_query=Romanos+12+Fraternidade+S%C3%A3o+Jo%C3%A3o+Paulo+II"
+      },
+      "hino": "88 – Revela a Nós Senhor"
+    },
+    {
+      "id": "s04-d7",
+      "semana": 4,
+      "dia": 7,
+      "ordem": 28,
+      "titulo": "Andar no que Deus revelou",
+      "versiculoRef": "Salmos 25:5",
+      "versiculoTexto": "Guia-me na tua verdade, e ensina-me; pois tu és o Deus da minha salvação; em ti espero todo o dia.",
+      "passagemRef": "Miquéias 6:8 / Salmos 25:4-5",
+      "reflexao": "Miquéias resume o que Deus pede: praticar a justiça, amar a misericórdia e andar humildemente com Ele. Ouvir é só o começo; andar no que foi ouvido é o que transforma a vida. O Salmo 25 completa com um pedido: “guia-me na tua verdade”. É a atitude de quem quer continuar aprendendo.",
+      "fraseChave": "Guia-me na tua verdade, e ensina-me.",
+      "perguntas": [
+        "Olhando para estas quatro semanas, o que Deus tem mostrado sobre meu próximo passo?",
+        "O que já mudou na minha capacidade de reconhecer a voz dEle desde a semana 1?",
+        "Que compromisso simples quero levar para a próxima etapa?"
+      ],
+      "louvor": {
+        "titulo": "Guia-me",
+        "artista": "Marcelo Ferreira Music",
+        "link": "https://www.youtube.com/results?search_query=Guia-me+Marcelo+Ferreira+Music"
+      },
+      "hino": "141 – Guia-me Sempre, Meu Senhor"
+    },
+    {
+      "id": "s05-d1",
+      "semana": 5,
+      "dia": 1,
+      "ordem": 29,
+      "titulo": "Receber o perdão de Deus",
+      "versiculoRef": "1 João 1:9",
+      "versiculoTexto": "Se confessarmos os nossos pecados, ele é fiel e justo para nos perdoar os pecados e nos purificar de toda a injustiça.",
+      "passagemRef": "1 João 1:5-10",
+      "reflexao": "O perdão de Deus não é conquistado, é recebido. João diz que Ele é fiel e justo para perdoar quem confessa, o que significa que a base do perdão é o caráter dEle, e não o tamanho do nosso arrependimento. Confessar é dizer a verdade sobre o que fizemos; aceitar o perdão é parar de tentar pagar uma conta que já foi paga.",
+      "fraseChave": "Ele é fiel e justo para nos perdoar.",
+      "perguntas": [
+        "Existe algo que ainda carrego como se não estivesse perdoada?",
+        "O que sinto quando penso em aceitar esse perdão sem tentar merecê-lo?",
+        "Que oração quero fazer hoje para receber isso de coração?"
+      ],
+      "louvor": {
+        "titulo": "Perdão",
+        "artista": "Paulo Cesar Baruk",
+        "link": "https://www.youtube.com/results?search_query=Perd%C3%A3o+Paulo+Cesar+Baruk"
+      },
+      "hino": "257 – O Perdão Sem Igual"
+    },
+    {
+      "id": "s05-d2",
+      "semana": 5,
+      "dia": 2,
+      "ordem": 30,
+      "titulo": "Perdoar a si mesma",
+      "versiculoRef": "Salmos 103:12",
+      "versiculoTexto": "Quanto está longe o oriente do ocidente, tanto afasta de nós as nossas transgressões.",
+      "passagemRef": "Salmos 103:8-14",
+      "reflexao": "O salmista descreve a distância entre o oriente e o ocidente, algo sem fim, para mostrar o quanto Deus afasta as transgressões de quem se volta a Ele. Se Deus não olha mais para aquilo, insistir em usar o erro contra si mesma é, de certa forma, discordar do perdão que Ele já deu. Perdoar a si mesma é aceitar a graça que se pede a Ele.",
+      "fraseChave": "Tanto afasta de nós as nossas transgressões.",
+      "perguntas": [
+        "Que erro do passado ainda uso contra mim mesma?",
+        "Se Deus já não olha mais para isso, por que eu continuo olhando?",
+        "Como seria me tratar com a mesma graça que peço a Ele?"
+      ],
+      "louvor": {
+        "titulo": "Deus Perdoa",
+        "artista": "Rafaela Pinho",
+        "link": "https://www.youtube.com/results?search_query=Deus+Perdoa+Rafaela+Pinho"
+      },
+      "hino": "255 – Meu Redentor"
+    },
+    {
+      "id": "s05-d3",
+      "semana": 5,
+      "dia": 3,
+      "ordem": 31,
+      "titulo": "Perdoar quem me feriu",
+      "versiculoRef": "Colossenses 3:13",
+      "versiculoTexto": "Suportando-vos uns aos outros, e perdoando-vos uns aos outros, se alguém tiver queixa contra outro; assim como Cristo vos perdoou, assim fazei vós também.",
+      "passagemRef": "Mateus 6:14-15 / Colossenses 3:12-14",
+      "reflexao": "Perdoar não é dizer que o que aconteceu estava certo, nem esquecer, nem necessariamente reatar o contato. É soltar a dívida emocional e entregar a justiça a Deus. Paulo fundamenta o perdão no que Cristo fez por nós: perdoamos como quem foi perdoado. Isso não elimina a dor, mas impede que ela governe.",
+      "fraseChave": "Assim como Cristo vos perdoou, assim fazei vós também.",
+      "perguntas": [
+        "Existe alguém que ainda não consegui perdoar de verdade?",
+        "O que esse perdão me custaria hoje, e o que me devolveria?",
+        "Isso significa reatar o contato ou apenas soltar internamente? O que faz sentido no meu caso?"
+      ],
+      "louvor": {
+        "titulo": "Perdão",
+        "artista": "Kleber Lucas",
+        "link": "https://www.youtube.com/results?search_query=Perd%C3%A3o+Kleber+Lucas"
+      },
+      "hino": "426 – União dos Irmãos"
+    },
+    {
+      "id": "s05-d4",
+      "semana": 5,
+      "dia": 4,
+      "ordem": 32,
+      "titulo": "Perdão é soltar",
+      "versiculoRef": "Efésios 4:32",
+      "versiculoTexto": "Antes sede uns para com os outros benignos, misericordiosos, perdoando-vos uns aos outros, como também Deus vos perdoou em Cristo.",
+      "passagemRef": "Efésios 4:31-32",
+      "reflexao": "Paulo pede que a amargura, a ira e a maledicência sejam removidas, e a alternativa é ser benigno e perdoar. Perdoar não apaga a memória, mas tira o veneno dela. Amargura guardada costuma crescer em silêncio; por isso o convite é soltar aos poucos, com ajuda de Deus.",
+      "fraseChave": "Perdoando-vos uns aos outros, como também Deus vos perdoou em Cristo.",
+      "perguntas": [
+        "Que amargura ainda mora em mim, mesmo que eu já tenha perdoado por fora?",
+        "Que passo pequeno posso dar hoje para soltar um pouco mais esse peso?"
+      ],
+      "louvor": {
+        "titulo": "Perdão",
+        "artista": "Fernandinho",
+        "link": "https://www.youtube.com/results?search_query=Perd%C3%A3o+Fernandinho"
+      },
+      "hino": "245 – Paz de Deus em Jesus Encontrei"
+    },
+    {
+      "id": "s05-d5",
+      "semana": 5,
+      "dia": 5,
+      "ordem": 33,
+      "titulo": "A liberdade de quem perdoa",
+      "versiculoRef": "Gálatas 5:1",
+      "versiculoTexto": "Estai, pois, firmes na liberdade com que Cristo nos libertou, e não torneis a meter-vos debaixo do jugo da servidão.",
+      "passagemRef": "Gálatas 5:1, 13-14",
+      "reflexao": "Paulo escreve a pessoas que estavam voltando a uma vida de regras e culpa e lembra que Cristo as libertou. Guardar mágoa é uma forma de ficar presa a quem nos feriu; perdoar abre a porta. A liberdade não é ausência de dor, e sim não ser mais governada por ela.",
+      "fraseChave": "Estai, pois, firmes na liberdade com que Cristo nos libertou.",
+      "perguntas": [
+        "Como seria minha semana se eu vivesse livre dessa mágoa específica?",
+        "O que significa estar firme na liberdade que Cristo já me deu?"
+      ],
+      "louvor": {
+        "titulo": "Nada Além do Sangue",
+        "artista": "Fernandinho",
+        "link": "https://www.youtube.com/results?search_query=Nada+Al%C3%A9m+do+Sangue+Fernandinho"
+      },
+      "hino": "69 – Jesus Quebrou os Meus Grilhões"
+    },
+    {
+      "id": "s05-d6",
+      "semana": 5,
+      "dia": 6,
+      "ordem": 34,
+      "titulo": "Reconciliação onde for possível",
+      "versiculoRef": "Romanos 12:18",
+      "versiculoTexto": "Se for possível, quanto estiver em vós, tende paz com todos os homens.",
+      "passagemRef": "Romanos 12:17-21",
+      "reflexao": "Paulo escreve “se for possível, quanto estiver em vós”: reconhece que nem toda reconciliação depende só de nós. A responsabilidade de cada um é a própria parte: não pagar o mal com o mal e buscar a paz sem exigir que o outro mude primeiro. Há relações em que a reconciliação plena não será possível, e ainda assim a atitude pode ser de paz.",
+      "fraseChave": "Tende paz com todos os homens.",
+      "perguntas": [
+        "Existe alguma relação em que eu poderia dar um passo de paz, mesmo pequeno?",
+        "O que é da minha parte nessa situação, e o que não é?",
+        "Como seria buscar paz sem exigir que a outra pessoa mude primeiro?"
+      ],
+      "louvor": {
+        "titulo": "Recomeçar",
+        "artista": "Aline Barros",
+        "link": "https://www.youtube.com/results?search_query=Recome%C3%A7ar+Aline+Barros"
+      },
+      "hino": "247 – Deus Nos Guarde No Seu Amor"
+    },
+    {
+      "id": "s05-d7",
+      "semana": 5,
+      "dia": 7,
+      "ordem": 35,
+      "titulo": "Um coração leve para seguir",
+      "versiculoRef": "Filipenses 3:13-14",
+      "versiculoTexto": "Irmãos, quanto a mim, não julgo que o haja alcançado; mas uma coisa faço, e é que, esquecendo-me das coisas que atrás ficam, e avançando para as que estão diante de mim, prossigo para o alvo, pelo prêmio da soberana vocação de Deus em Cristo Jesus.",
+      "passagemRef": "Filipenses 3:12-14",
+      "reflexao": "Paulo, que tinha muito a esquecer do próprio passado, escolhe olhar para a frente. “Esquecer” aqui não é apagar a memória, é não deixar o passado dirigir o presente. Esta semana não eliminou o que aconteceu, mas pode ter aberto espaço para seguir mais leve.",
+      "fraseChave": "Prossigo para o alvo.",
+      "perguntas": [
+        "O que solto, de fato, ao fechar esta semana?",
+        "Como meu coração está diferente de domingo para hoje?",
+        "Que oração de gratidão e libertação quero escrever para fechar esta etapa?"
+      ],
+      "louvor": {
+        "titulo": "Uma Nova História",
+        "artista": "Fernandinho",
+        "link": "https://www.youtube.com/results?search_query=Uma+Nova+Hist%C3%B3ria+Fernandinho"
+      },
+      "hino": "253 – Avante, ó Crentes"
+    },
+    {
+      "id": "s06-d1",
+      "semana": 6,
+      "dia": 1,
+      "ordem": 36,
+      "titulo": "Filha amada, não serva",
+      "versiculoRef": "Gálatas 4:7",
+      "versiculoTexto": "Assim que já não és servo, mas filho; e, se és filho, és também herdeiro de Deus por Cristo.",
+      "passagemRef": "Gálatas 4:4-7 / Romanos 8:15-16",
+      "reflexao": "Paulo explica que, em Cristo, deixamos de ser servos para sermos filhos e herdeiros. A diferença é de relação: o servo tenta agradar para manter o lugar; o filho já tem o lugar. Viver como filha muda a oração (chamar Deus de “Aba, Pai”), a obediência (por amor, não por medo) e a segurança diante de Deus.",
+      "fraseChave": "Já não és servo, mas filho.",
+      "perguntas": [
+        "Costumo me relacionar com Deus como filha ou como alguém tentando “dar conta”?",
+        "O que mudaria se eu vivesse como filha amada, e não como serva?",
+        "O que “herdeira de Deus” significa para mim, na prática?"
+      ],
+      "louvor": {
+        "titulo": "Filha do Rei",
+        "artista": "Priscilla Brostt",
+        "link": "https://www.youtube.com/results?search_query=Filha+do+Rei+Priscilla+Brostt"
+      },
+      "hino": "266 – Resgatados Fomos"
+    },
+    {
+      "id": "s06-d2",
+      "semana": 6,
+      "dia": 2,
+      "ordem": 37,
+      "titulo": "Escolhida antes do mundo",
+      "versiculoRef": "Efésios 1:4",
+      "versiculoTexto": "Como também nos elegeu nele antes da fundação do mundo, para que fôssemos santos e irrepreensíveis diante dele em amor.",
+      "passagemRef": "Efésios 1:3-6",
+      "reflexao": "Paulo afirma que Deus nos escolheu em Cristo antes da fundação do mundo. Não somos plano B nem surpresa: fazemos parte de um propósito anterior a nós. Isso responde, em parte, à sensação de “sobrar” que muitos carregam. O valor vem de ter sido escolhida por Deus, e não de ter sido escolhida por outras pessoas.",
+      "fraseChave": "Nos elegeu nele antes da fundação do mundo.",
+      "perguntas": [
+        "Como me sinto ao pensar que fui escolhida, e não apenas aceita?",
+        "Em que área ainda me sinto “sobrando”? O que essa verdade muda ali?"
+      ],
+      "louvor": {
+        "titulo": "Tua Graça Me Basta",
+        "artista": "Davi Sacer",
+        "link": "https://www.youtube.com/results?search_query=Tua+Gra%C3%A7a+Me+Basta+Davi+Sacer"
+      },
+      "hino": "250 – Noiva de Jesus, Apronta-te"
+    },
+    {
+      "id": "s06-d3",
+      "semana": 6,
+      "dia": 3,
+      "ordem": 38,
+      "titulo": "Templo do Espírito Santo",
+      "versiculoRef": "1 Coríntios 6:19",
+      "versiculoTexto": "Ou não sabeis que o vosso corpo é o templo do Espírito Santo, que habita em vós, o qual tendes de Deus, e que não sois de vós mesmos?",
+      "passagemRef": "1 Coríntios 6:19-20",
+      "reflexao": "Paulo diz que o corpo é templo do Espírito Santo, que habita em quem crê. Isso significa que Deus não observa de longe: Ele habita. A consequência prática é cuidado: com o corpo, com a mente e com a forma como nos tratamos. O texto também lembra que fomos comprados por um preço, ou seja, temos valor.",
+      "fraseChave": "O vosso corpo é o templo do Espírito Santo.",
+      "perguntas": [
+        "Trato meu corpo e minha mente como “templo”, ou como algo qualquer?",
+        "O que preciso cuidar melhor sabendo que Deus habita em mim?",
+        "Como essa verdade muda a forma como falo comigo mesma?"
+      ],
+      "louvor": {
+        "titulo": "Deus Cuida de Mim",
+        "artista": "Aline Barros",
+        "link": "https://www.youtube.com/results?search_query=Deus+Cuida+de+Mim+Aline+Barros"
+      },
+      "hino": "262 – Senhor, Estás Comigo"
+    },
+    {
+      "id": "s06-d4",
+      "semana": 6,
+      "dia": 4,
+      "ordem": 39,
+      "titulo": "Vencedora, não vítima",
+      "versiculoRef": "Romanos 8:37",
+      "versiculoTexto": "Mas em todas estas coisas somos mais do que vencedores, por aquele que nos amou.",
+      "passagemRef": "Romanos 8:31-39",
+      "reflexao": "Romanos 8 termina com uma lista do que poderia nos separar do amor de Deus, e a resposta é que nada separa. Ser “mais que vencedor” não quer dizer ter uma vida fácil, mas ter, no meio da dificuldade, uma vitória que não depende das circunstâncias. A identidade de quem é amado por Deus não é a de vítima.",
+      "fraseChave": "Somos mais do que vencedores, por aquele que nos amou.",
+      "perguntas": [
+        "Em que situação tenho me sentido mais vítima do que vencedora?",
+        "O que muda se eu olhar para essa situação sabendo que sou “mais que vencedora”?",
+        "Que atitude concreta essa verdade me convida a tomar hoje?"
+      ],
+      "louvor": {
+        "titulo": "Grandes Coisas",
+        "artista": "Fernandinho",
+        "link": "https://www.youtube.com/results?search_query=Grandes+Coisas+Fernandinho"
+      },
+      "hino": "260 – Avante Com O Nosso Capitão"
+    },
+    {
+      "id": "s06-d5",
+      "semana": 6,
+      "dia": 5,
+      "ordem": 40,
+      "titulo": "Preciosa aos olhos de Deus",
+      "versiculoRef": "Isaías 43:4",
+      "versiculoTexto": "Visto que foste precioso aos meus olhos, foste honrado, e eu te amei.",
+      "passagemRef": "Isaías 43:1-4 / Salmos 139:13-16",
+      "reflexao": "Deus fala ao povo de Israel: “foste precioso aos meus olhos, foste honrado, e eu te amei”. O valor não é conquistado por desempenho; é declarado por quem ama. O Salmo 139 acrescenta que fomos formados de modo “assombroso” e “maravilhoso”. Quando o valor depende da opinião alheia, oscila; quando depende de Deus, é estável.",
+      "fraseChave": "Foste precioso aos meus olhos, e eu te amei.",
+      "perguntas": [
+        "De onde costumo tirar meu senso de valor: de Deus ou da aprovação dos outros?",
+        "O que “maravilhosamente formada” significa quando penso em mim mesma?",
+        "O que eu diria a uma amiga que se sente sem valor? Consigo dizer o mesmo a mim?"
+      ],
+      "louvor": {
+        "titulo": "Bondade de Deus",
+        "artista": "Isaías Saad",
+        "link": "https://www.youtube.com/results?search_query=Bondade+de+Deus+Isa%C3%ADas+Saad"
+      },
+      "hino": "254 – Mais Perto de Jesus"
+    },
+    {
+      "id": "s06-d6",
+      "semana": 6,
+      "dia": 6,
+      "ordem": 41,
+      "titulo": "Chamada com um propósito",
+      "versiculoRef": "Efésios 2:10",
+      "versiculoTexto": "Porque somos feitura sua, criados em Cristo Jesus para as boas obras, as quais Deus preparou para que andássemos nelas.",
+      "passagemRef": "Efésios 2:8-10",
+      "reflexao": "Antes do versículo 10, Paulo deixa claro que a salvação é graça, e não obra. Só então diz que somos “feitura sua” (a palavra grega poiema, que dá origem a “poema”, sugere obra de arte), criados para boas obras que Deus preparou de antemão. O propósito não é um fardo; é consequência de ter sido feita por Ele.",
+      "fraseChave": "Somos feitura sua, criados para as boas obras.",
+      "perguntas": [
+        "Em que áreas da vida sinto que Deus pode estar me preparando para algo?",
+        "O que faço bem, ou gosto de fazer, que talvez faça parte desse propósito?",
+        "Que passo pequeno posso dar hoje na direção do que Deus tem preparado?"
+      ],
+      "louvor": {
+        "titulo": "Prioridade",
+        "artista": "Midian Lima",
+        "link": "https://www.youtube.com/results?search_query=Prioridade+Midian+Lima"
+      },
+      "hino": "268 – Confiante em Deus"
+    },
+    {
+      "id": "s06-d7",
+      "semana": 6,
+      "dia": 7,
+      "ordem": 42,
+      "titulo": "Uma nova forma de se ver",
+      "versiculoRef": "2 Coríntios 5:17",
+      "versiculoTexto": "Assim que, se alguém está em Cristo, nova criatura é; as coisas velhas já passaram; eis que tudo se fez novo.",
+      "passagemRef": "2 Coríntios 5:17-21",
+      "reflexao": "Depois de seis semanas, vale olhar para trás. Reencontro, confiança, constância, escuta, perdão e identidade formam um caminho: voltar, confiar, permanecer, ouvir, soltar e descobrir quem se é. A pergunta deixa de ser só “quem eu era” e passa a ser “quem eu sou agora, em Cristo”. As coisas velhas passaram; o que é novo está em formação.",
+      "fraseChave": "As coisas velhas já passaram; eis que tudo se fez novo.",
+      "perguntas": [
+        "Olhando para estas seis semanas, como mudou a forma como me vejo?",
+        "Que “coisa velha” sinto que realmente ficou para trás?",
+        "Que oração quero escrever hoje, celebrando quem sou em Cristo?"
+      ],
+      "louvor": {
+        "titulo": "Renova-me",
+        "artista": "Aline Barros",
+        "link": "https://www.youtube.com/results?search_query=Renova-me+Aline+Barros"
+      },
+      "hino": "265 – Doce É Crer Em Cristo"
+    },
+    {
+      "id": "s07-d1",
+      "semana": 7,
+      "dia": 1,
+      "ordem": 43,
+      "titulo": "Ouvir sem praticar é autoengano",
+      "versiculoRef": "Tiago 1:22",
+      "versiculoTexto": "E sede cumpridores da palavra, e não somente ouvintes, enganando-vos a vós mesmos.",
+      "passagemRef": "Tiago 1:22-25",
+      "reflexao": "Tiago usa a imagem de alguém que se olha no espelho e esquece imediatamente a própria aparência. Ouvir a Palavra sem praticar é isso: contato sem transformação. O versículo fala em “engano” porque a pessoa acredita estar avançando só porque sabe. A semana começa com uma pergunta direta: o que você já sabe que Deus pede e ainda não faz?",
+      "fraseChave": "Sede cumpridores da palavra, e não somente ouvintes.",
+      "perguntas": [
+        "O que já sei que Deus pede de mim e ainda não faço?",
+        "Que desculpa costumo usar para não obedecer nisso?",
+        "Se eu deixasse a desculpa de lado hoje, qual seria o primeiro passo?"
+      ],
+      "louvor": {
+        "titulo": "Eu Escolho Deus",
+        "artista": "Thalles Roberto",
+        "link": "https://www.youtube.com/results?search_query=Eu+Escolho+Deus+Thalles+Roberto"
+      },
+      "hino": "221 – Opera em Mim"
+    },
+    {
+      "id": "s07-d2",
+      "semana": 7,
+      "dia": 2,
+      "ordem": 44,
+      "titulo": "Obediência parcial não é obediência",
+      "versiculoRef": "1 Samuel 15:22",
+      "versiculoTexto": "Porém Samuel disse: Tem porventura o Senhor tanto prazer em holocaustos e sacrifícios como em que se obedeça à voz do Senhor? Eis que o obedecer é melhor do que o sacrificar.",
+      "passagemRef": "1 Samuel 15:13-23",
+      "reflexao": "Deus ordenou que Saul destruísse totalmente os amalequitas, mas ele poupou o rei e o melhor do gado e disse que era para oferecer sacrifício. Samuel responde que obedecer é melhor do que sacrificar. Saul chamou de obediência o que Deus chamou de rebeldia. A lição é que Deus busca um coração que cede, e não uma oferta que compensa a desobediência.",
+      "fraseChave": "O obedecer é melhor do que o sacrificar.",
+      "perguntas": [
+        "Em que área obedeço “quase tudo” e chamo isso de obediência?",
+        "O que ofereço a Deus (esforço, serviço, aparência) no lugar do que Ele realmente pede?",
+        "O que significaria ceder de verdade nisso?"
+      ],
+      "louvor": {
+        "titulo": "Preciso de Ti",
+        "artista": "Diante do Trono",
+        "link": "https://www.youtube.com/results?search_query=Preciso+de+Ti+Diante+do+Trono"
+      },
+      "hino": "30 – Não Sou Meu"
+    },
+    {
+      "id": "s07-d3",
+      "semana": 7,
+      "dia": 3,
+      "ordem": 45,
+      "titulo": "O custo de dizer sim",
+      "versiculoRef": "Lucas 9:62",
+      "versiculoTexto": "Jesus, porém, lhe disse: Ninguém que lança mão do arado e olha para trás é apto para o reino de Deus.",
+      "passagemRef": "Lucas 9:57-62",
+      "reflexao": "Três pessoas se aproximam de Jesus querendo segui-lo, e Ele responde a cada uma sem suavizar o custo. Jesus nunca esconde o preço do discipulado; convida com honestidade. A imagem do arado mostra que seguir exige olhar para a frente. A pergunta não é se seguir custa, mas se vale o preço.",
+      "fraseChave": "Ninguém que lança mão do arado e olha para trás é apto para o reino de Deus.",
+      "perguntas": [
+        "O que me custa, de verdade, seguir a Deus na minha rotina atual?",
+        "Existe algo que quero manter “só mais um pouco” antes de me entregar de vez?"
+      ],
+      "louvor": {
+        "titulo": "Deus É Deus",
+        "artista": "Delino Marçal",
+        "link": "https://www.youtube.com/results?search_query=Deus+%C3%89+Deus+Delino+Mar%C3%A7al"
+      },
+      "hino": "605 – Quero Te Seguir"
+    },
+    {
+      "id": "s07-d4",
+      "semana": 7,
+      "dia": 4,
+      "ordem": 46,
+      "titulo": "Obedecer antes de entender",
+      "versiculoRef": "João 2:5",
+      "versiculoTexto": "Sua mãe disse aos serventes: Fazei tudo quanto ele vos disser.",
+      "passagemRef": "João 2:1-11",
+      "reflexao": "Nas bodas de Caná, Maria diz aos serventes que façam o que Jesus mandar. Eles enchem as talhas de água sem saber o que vai acontecer. O milagre vem depois da obediência, não antes. Em muitos momentos, a clareza que esperamos só aparece depois do passo que Deus pede.",
+      "fraseChave": "Fazei tudo quanto ele vos disser.",
+      "perguntas": [
+        "Estou esperando entender tudo antes de obedecer em alguma coisa?",
+        "O que Deus pode estar pedindo agora que só vai fazer sentido depois?",
+        "Consigo dar esse passo hoje, mesmo sem clareza total?"
+      ],
+      "louvor": {
+        "titulo": "Eis-me Aqui",
+        "artista": "Cassiane",
+        "link": "https://www.youtube.com/results?search_query=Eis-me+Aqui+Cassiane"
+      },
+      "hino": "151 – Fala, Jesus Querido"
+    },
+    {
+      "id": "s07-d5",
+      "semana": 7,
+      "dia": 5,
+      "ordem": 47,
+      "titulo": "Obediência quando dói",
+      "versiculoRef": "Lucas 22:42",
+      "versiculoTexto": "Dizendo: Pai, se queres, passa de mim este cálice; todavia não se faça a minha vontade, mas a tua.",
+      "passagemRef": "Lucas 22:39-46",
+      "reflexao": "No Getsêmani, Jesus pede que o cálice passe e, ainda assim, diz “não se faça a minha vontade, mas a tua”. A obediência dEle não foi ausência de conflito interno; foi escolha dentro do conflito. Isso mostra que dizer “isto é difícil” a Deus não é falta de fé. O que importa é onde a oração termina.",
+      "fraseChave": "Não se faça a minha vontade, mas a tua.",
+      "perguntas": [
+        "Existe alguma obediência que estou evitando porque simplesmente dói?",
+        "Que oração sincera quero fazer sobre isso hoje, sem fingir que está fácil?"
+      ],
+      "louvor": {
+        "titulo": "Tudo Posso",
+        "artista": "Eyshila",
+        "link": "https://www.youtube.com/results?search_query=Tudo+Posso+Eyshila"
+      },
+      "hino": "218 – Dá Teu Fardo a Jesus"
+    },
+    {
+      "id": "s07-d6",
+      "semana": 7,
+      "dia": 6,
+      "ordem": 48,
+      "titulo": "Obediência por amor, não por medo",
+      "versiculoRef": "João 14:15",
+      "versiculoTexto": "Se me amais, guardai os meus mandamentos.",
+      "passagemRef": "João 14:15-21 / 1 João 4:18",
+      "reflexao": "“Se me amais, guardai os meus mandamentos.” A ordem importa: o amor vem primeiro e a obediência é consequência. Quando a ordem se inverte, a fé vira performance e a obediência vira tentativa de merecer. João completa dizendo que no amor não há temor. Perguntar de onde vem minha obediência, do amor ou do medo de errar, ajuda a reposicionar a relação.",
+      "fraseChave": "No amor não há temor.",
+      "perguntas": [
+        "Minha obediência tem vindo mais de amor ou de medo de errar?",
+        "Como seria obedecer por querer estar perto dEle, e não por culpa?",
+        "O que preciso parar de tentar “merecer”?"
+      ],
+      "louvor": {
+        "titulo": "Bondade de Deus",
+        "artista": "Isaías Saad",
+        "link": "https://www.youtube.com/results?search_query=Bondade+de+Deus+Isa%C3%ADas+Saad"
+      },
+      "hino": "145 – União do Crente com Seu Senhor"
+    },
+    {
+      "id": "s07-d7",
+      "semana": 7,
+      "dia": 7,
+      "ordem": 49,
+      "titulo": "Um passo concreto, não uma intenção",
+      "versiculoRef": "Josué 1:9",
+      "versiculoTexto": "Não to mandei eu? Esforça-te, e tem bom ânimo; não pasmes, nem te espantes, porque o Senhor teu Deus é contigo, por onde quer que andares.",
+      "passagemRef": "Mateus 7:21 / Josué 1:6-9",
+      "reflexao": "Intenção não transforma a vida; passo transforma. Josué recebe a ordem de ser forte e corajoso, mas a base é a promessa: o Senhor está com ele por onde quer que ande. Mateus 7:21 lembra que não basta dizer “Senhor, Senhor”. Esta semana confrontou; agora ela precisa virar algo prático, mesmo pequeno, e com companhia.",
+      "fraseChave": "O Senhor teu Deus é contigo, por onde quer que andares.",
+      "perguntas": [
+        "Das perguntas mais difíceis desta semana, qual mais mexeu comigo?",
+        "Qual é UM passo concreto que vou dar nos próximos sete dias (com data, se possível)?",
+        "Quem pode me ajudar ou saber disso, para eu não ficar só na intenção?"
+      ],
+      "louvor": {
+        "titulo": "Grandes Coisas",
+        "artista": "Fernandinho",
+        "link": "https://www.youtube.com/results?search_query=Grandes+Coisas+Fernandinho"
+      },
+      "hino": "225 – Sê Valente"
+    },
+    {
+      "id": "s08-d1",
+      "semana": 8,
+      "dia": 1,
+      "ordem": 50,
+      "titulo": "Deus é Criador",
+      "versiculoRef": "Salmos 19:1",
+      "versiculoTexto": "Os céus declaram a glória de Deus, e o firmamento anuncia a obra das suas mãos.",
+      "passagemRef": "Gênesis 1:1-5 / Salmos 19:1-4",
+      "reflexao": "A Bíblia começa com Deus agindo: antes de qualquer lei ou promessa, o primeiro fato é que Ele cria, e cria por sua palavra (“disse Deus... e foi assim”). O Salmo 19 acrescenta que a criação também comunica: o céu “declara” a glória de Deus sem palavras. Olhar a criação com atenção é uma forma de conhecer o Criador.",
+      "fraseChave": "Os céus declaram a glória de Deus.",
+      "perguntas": [
+        "O que a criação me diz sobre quem Deus é (poder, cuidado, ordem, beleza)?",
+        "Se Deus cria pela sua palavra, o que isso me ensina sobre o valor da Palavra dEle na minha vida?",
+        "Onde percebi a marca de Deus na natureza nesta semana?"
+      ],
+      "louvor": {
+        "titulo": "Grande É o Senhor",
+        "artista": "Adhemar de Campos",
+        "link": "https://www.youtube.com/results?search_query=Grande+%C3%89+o+Senhor+Adhemar+de+Campos"
+      },
+      "hino": "38 – O Senhor é Rei"
+    },
+    {
+      "id": "s08-d2",
+      "semana": 8,
+      "dia": 2,
+      "ordem": 51,
+      "titulo": "Deus é Santo",
+      "versiculoRef": "Isaías 6:3",
+      "versiculoTexto": "E clamavam uns para os outros, dizendo: Santo, Santo, Santo é o Senhor dos Exércitos; toda a terra está cheia da sua glória.",
+      "passagemRef": "Isaías 6:1-8",
+      "reflexao": "“Santo” significa, na raiz, “separado”, diferente de tudo o que existe. Isaías vê a santidade de Deus e a primeira reação é reconhecer a própria impureza, e não se sentir confortável. Mas o texto não termina aí: o pecado dele é tratado por Deus, e só então ele ouve o chamado. A sequência importa: visão de Deus, consciência do pecado, purificação, envio.",
+      "fraseChave": "Santo, Santo, Santo é o Senhor dos Exércitos.",
+      "perguntas": [
+        "Que reação a santidade de Deus provoca em mim: medo, reverência, distância, admiração?",
+        "O que a sequência do texto (visão, consciência do pecado, purificação, envio) me ensina?",
+        "Como posso cultivar mais reverência no meu tempo com Deus?"
+      ],
+      "louvor": {
+        "titulo": "Ele É Exaltado",
+        "artista": "Adhemar de Campos",
+        "link": "https://www.youtube.com/results?search_query=Ele+%C3%89+Exaltado+Adhemar+de+Campos"
+      },
+      "hino": "252 – Santo, Santo És Tu, Senhor"
+    },
+    {
+      "id": "s08-d3",
+      "semana": 8,
+      "dia": 3,
+      "ordem": 52,
+      "titulo": "Deus está presente",
+      "versiculoRef": "Salmos 139:7",
+      "versiculoTexto": "Para onde me irei do teu espírito, ou para onde fugirei da tua face?",
+      "passagemRef": "Salmos 139:7-12",
+      "reflexao": "O salmista pergunta para onde poderia fugir da presença de Deus e conclui que em lugar nenhum: nem no céu, nem nas profundezas, nem na escuridão. Isso pode soar como ameaça ou como consolo, dependendo de quem lê. O contexto do salmo indica consolo: não há lugar onde Deus não alcance, incluindo os momentos em que nos sentimos sozinhos.",
+      "fraseChave": "Para onde me irei do teu espírito?",
+      "perguntas": [
+        "A ideia de que Deus está em todo lugar me traz mais conforto ou mais desconforto? Por quê?",
+        "Em que momento difícil senti (ou gostaria de ter sentido) a presença de Deus?",
+        "O que muda no meu dia se eu lembrar que Ele está aqui, agora?"
+      ],
+      "louvor": {
+        "titulo": "Aquieta Minh'alma",
+        "artista": "Ministério Zoe",
+        "link": "https://www.youtube.com/results?search_query=Aquieta+Minh%27alma+Minist%C3%A9rio+Zoe"
+      },
+      "hino": "262 – Senhor, Estás Comigo"
+    },
+    {
+      "id": "s08-d4",
+      "semana": 8,
+      "dia": 4,
+      "ordem": 53,
+      "titulo": "Deus me conhece",
+      "versiculoRef": "Salmos 139:1",
+      "versiculoTexto": "Senhor, tu me sondaste, e me conheces.",
+      "passagemRef": "Salmos 139:1-6, 13-16",
+      "reflexao": "O mesmo salmo agora fala de conhecimento: Deus sabe quando me sento e quando me levanto, e conhece minhas palavras antes de eu dizê-las. Não é um conhecimento distante, é íntimo, desde a formação no ventre. Ser plenamente conhecida e ainda assim amada é uma das ideias centrais da fé cristã.",
+      "fraseChave": "Senhor, tu me sondaste e me conheces.",
+      "perguntas": [
+        "O que escondo de Deus, achando que Ele não sabe?",
+        "Como é saber que Ele conhece tudo sobre mim e mesmo assim me chama de filha?",
+        "Que parte de mim gostaria de entregar mais abertamente a Ele?"
+      ],
+      "louvor": {
+        "titulo": "Filha do Rei",
+        "artista": "Priscilla Brostt",
+        "link": "https://www.youtube.com/results?search_query=Filha+do+Rei+Priscilla+Brostt"
+      },
+      "hino": "198 – Jesus, o Bom Amigo"
+    },
+    {
+      "id": "s08-d5",
+      "semana": 8,
+      "dia": 5,
+      "ordem": 54,
+      "titulo": "Deus é fiel",
+      "versiculoRef": "Deuteronômio 7:9",
+      "versiculoTexto": "Sabe, pois, que o Senhor teu Deus é Deus, o Deus fiel, que guarda o pacto e a misericórdia até mil gerações aos que o amam e guardam os seus mandamentos.",
+      "passagemRef": "Deuteronômio 7:9 / Lamentações 3:22-23",
+      "reflexao": "Fidelidade é uma característica de Deus muito ligada à palavra “aliança”: Ele cumpre o que promete, mesmo quando o povo falha. Lamentações foi escrito num dos momentos mais escuros da história de Israel, e ainda assim o autor afirma que a fidelidade de Deus se renova a cada manhã. Confiar na fidelidade dEle é decidir lembrar do que Ele já fez quando as circunstâncias dizem o contrário.",
+      "fraseChave": "Deus é o Deus fiel, que guarda o pacto.",
+      "perguntas": [
+        "Que promessa de Deus tenho dificuldade de acreditar que vale para mim?",
+        "Consigo lembrar de uma situação em que Deus se mostrou fiel, mesmo eu não sendo?",
+        "O que significa confiar na fidelidade dEle quando as circunstâncias dizem o contrário?"
+      ],
+      "louvor": {
+        "titulo": "Fiel é Deus",
+        "artista": "Isaías Saad",
+        "link": "https://www.youtube.com/results?search_query=Fiel+%C3%A9+Deus+Isa%C3%ADas+Saad"
+      },
+      "hino": "107 – Firme nas Promessas"
+    },
+    {
+      "id": "s08-d6",
+      "semana": 8,
+      "dia": 6,
+      "ordem": 55,
+      "titulo": "Deus é justo e misericordioso",
+      "versiculoRef": "Êxodo 34:6",
+      "versiculoTexto": "E passando o Senhor por diante dele, clamou: Senhor, Senhor Deus, misericordioso, e piedoso, tardio em irar-se, e grande em benignidade e verdade.",
+      "passagemRef": "Êxodo 34:5-7",
+      "reflexao": "Este é um dos textos mais citados no restante da Bíblia para descrever Deus: compassivo, cheio de graça, paciente e rico em amor, mas que também não deixa o mal sem tratamento. Justiça e misericórdia não competem: os dois fazem parte de quem Ele é. Muita gente enfatiza só um dos lados e acaba com uma imagem incompleta dEle.",
+      "fraseChave": "Misericordioso e piedoso, tardio em irar-se e grande em benignidade e verdade.",
+      "perguntas": [
+        "Costumo ver Deus mais como juiz ou mais como misericordioso? De onde vem essa imagem?",
+        "O que muda quando penso nos dois lados juntos?",
+        "Como a misericórdia de Deus me convida a tratar as pessoas ao meu redor?"
+      ],
+      "louvor": {
+        "titulo": "Graça",
+        "artista": "Aline Barros",
+        "link": "https://www.youtube.com/results?search_query=Gra%C3%A7a+Aline+Barros"
+      },
+      "hino": "119 – Inesgotável é Seu Amor"
+    },
+    {
+      "id": "s08-d7",
+      "semana": 8,
+      "dia": 7,
+      "ordem": 56,
+      "titulo": "Deus é amor",
+      "versiculoRef": "1 João 4:8",
+      "versiculoTexto": "Aquele que não ama não conhece a Deus; porque Deus é amor.",
+      "passagemRef": "1 João 4:7-10",
+      "reflexao": "João não diz apenas que Deus “tem” amor, mas que Ele “é” amor. E define amor pelo que Deus fez, não por um sentimento: enviou o Filho. Todas as características da semana (criador, santo, presente, conhecedor, fiel, justo) ganham sentido quando lidas à luz desse amor. Fechar a semana com a pergunta “o que aprendi?” ajuda a definir o que estudar a seguir.",
+      "fraseChave": "Deus é amor.",
+      "perguntas": [
+        "Das características de Deus que vimos esta semana, qual mais me marcou? Por quê?",
+        "O que aprendi sobre Deus que eu não sabia ou tinha esquecido?",
+        "Que pergunta sobre Deus gostaria de estudar com mais calma nas próximas semanas?"
+      ],
+      "louvor": {
+        "titulo": "Bondade de Deus",
+        "artista": "Isaías Saad",
+        "link": "https://www.youtube.com/results?search_query=Bondade+de+Deus+Isa%C3%ADas+Saad"
+      },
+      "hino": "35 – O Grande Amor"
+    }
+  ]
+}
