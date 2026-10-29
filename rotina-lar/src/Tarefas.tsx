@@ -242,7 +242,7 @@ export default function Tarefas({ tarefas, erro }: { tarefas: Tarefa[]; erro: st
                   onPress={() => marcarFeita(item)}
                 >
                   <Text style={s.botaoTexto}>
-                    {ocupado ? '...' : feitaHoje ? 'Feito ✓' : 'Feito'}
+                    {ocupado ? '...' : feitaHoje ? 'Feito' : 'Feito'}
                   </Text>
                 </Pressable>
                 <Pressable

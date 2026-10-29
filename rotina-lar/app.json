@@ -8,7 +8,7 @@
     "scheme": "rotinalar",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/images/rotina-icon.png"
     },
     "android": {
       "package": "com.rotinalar.app",
