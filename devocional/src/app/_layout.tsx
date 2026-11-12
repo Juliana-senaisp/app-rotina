@@ -14,7 +14,7 @@ import { ActivityIndicator, View } from "react-native";
 
 import TelaLogin from "../componentes/TelaLogin";
 import { ProgressoProvider } from "../lib/progresso";
-import { useUsuario } from "../lib/usuario";
+import { useUsuario } from "../lib/useUsuario";
 import { cores } from "../tema";
 
 export default function RootLayout() {

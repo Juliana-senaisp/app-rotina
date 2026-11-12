@@ -10,7 +10,7 @@ import {
 } from "react";
 import { AppState } from "react-native";
 
-import { dataLocal } from "./dataLocal";
+import { dataLocal } from "./datas";
 import {
   carregarDevocional,
   carregarEstado,
