@@ -1,5 +1,7 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
+import { cores, fontes } from "../tema";
+
 type Props = {
   texto: string;
   onPress: () => void;
@@ -13,28 +15,33 @@ export default function Botao({ texto, onPress, desativado, secundario }: Props)
       onPress={onPress}
       disabled={desativado}
       style={[
-        styles.botao,
-        secundario && styles.botaoSecundario,
-        desativado && styles.botaoDesativado,
+        estilos.botao,
+        secundario && estilos.botaoSecundario,
+        desativado && estilos.botaoDesativado,
       ]}
     >
-      <Text style={[styles.texto, secundario && styles.textoSecundario]}>{texto}</Text>
+      <Text style={[estilos.texto, secundario && estilos.textoSecundario]}>{texto}</Text>
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
+const estilos = StyleSheet.create({
   botao: {
-    backgroundColor: "#2f4f6f",
-    paddingVertical: 14,
-    paddingHorizontal: 12,
-    borderRadius: 10,
+    backgroundColor: cores.verde,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 999,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#2f4f6f",
+    borderWidth: 1.5,
+    borderColor: cores.verde,
   },
-  botaoSecundario: { backgroundColor: "#ffffff" },
+  botaoSecundario: { backgroundColor: "transparent" },
   botaoDesativado: { opacity: 0.5 },
-  texto: { color: "#ffffff", fontSize: 16, fontWeight: "600", textAlign: "center" },
-  textoSecundario: { color: "#2f4f6f" },
+  texto: {
+    color: "#FFFFFF",
+    fontFamily: fontes.corpoNegrito,
+    fontSize: 16,
+    textAlign: "center",
+  },
+  textoSecundario: { color: cores.verdeEscuro },
 });

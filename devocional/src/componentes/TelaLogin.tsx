@@ -1,5 +1,16 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, TextInput } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -8,6 +19,8 @@ import {
 } from "firebase/auth";
 
 import { auth } from "../../firebase";
+import { salvarNome } from "../lib/devocional";
+import { app, cores, fontes, sombra } from "../tema";
 import Botao from "./Botao";
 
 function mensagemDeErro(erro: unknown): string {
@@ -35,6 +48,8 @@ function mensagemDeErro(erro: unknown): string {
 }
 
 export default function TelaLogin() {
+  const [criando, setCriando] = useState(false);
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [ocupado, setOcupado] = useState(false);
@@ -57,11 +72,12 @@ export default function TelaLogin() {
       await signInWithEmailAndPassword(auth, email.trim(), senha);
     });
 
-  // Ao criar a conta, o login é feito automaticamente e um e-mail de
-  // verificação é enviado (necessário apenas para o acesso de administrador).
+  // Ao criar a conta, o login é feito automaticamente. O e-mail de verificação
+  // só é necessário para o acesso de administrador.
   const criarConta = () =>
     executar(async () => {
       const cred = await createUserWithEmailAndPassword(auth, email.trim(), senha);
+      if (nome.trim()) await salvarNome(cred.user.uid, nome.trim());
       await sendEmailVerification(cred.user);
     });
 
@@ -76,56 +92,134 @@ export default function TelaLogin() {
     });
 
   return (
-    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-      <Text style={styles.titulo}>Devocional</Text>
+    <SafeAreaView style={estilos.tela}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView contentContainerStyle={estilos.conteudo} keyboardShouldPersistTaps="handled">
+          <View style={estilos.marca}>
+            <View style={estilos.icone}>
+              <Ionicons name="leaf-outline" size={40} color={cores.verdeEscuro} />
+            </View>
+            <Text style={estilos.nome}>{app.nome}</Text>
+            <Text style={estilos.frase}>{app.frase}</Text>
+          </View>
 
-      <TextInput
-        style={styles.campo}
-        placeholder="E-mail"
-        autoCapitalize="none"
-        autoComplete="email"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.campo}
-        placeholder="Senha (mínimo 6 caracteres)"
-        autoCapitalize="none"
-        secureTextEntry
-        value={senha}
-        onChangeText={setSenha}
-      />
+          <View style={estilos.cartao}>
+            <Text style={estilos.subtitulo}>{criando ? "Criar conta" : "Entrar"}</Text>
 
-      <Botao texto="Entrar" onPress={entrar} desativado={ocupado} />
-      <Botao texto="Criar conta" onPress={criarConta} desativado={ocupado} secundario />
-      <Pressable onPress={esqueciASenha} disabled={ocupado}>
-        <Text style={styles.link}>Esqueci a senha</Text>
-      </Pressable>
+            {criando && (
+              <TextInput
+                style={estilos.campo}
+                placeholder="Seu nome"
+                placeholderTextColor={cores.textoSuave}
+                autoCapitalize="words"
+                value={nome}
+                onChangeText={setNome}
+              />
+            )}
+            <TextInput
+              style={estilos.campo}
+              placeholder="E-mail"
+              placeholderTextColor={cores.textoSuave}
+              autoCapitalize="none"
+              autoComplete="email"
+              keyboardType="email-address"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              style={estilos.campo}
+              placeholder="Senha (mínimo 6 caracteres)"
+              placeholderTextColor={cores.textoSuave}
+              autoCapitalize="none"
+              secureTextEntry
+              value={senha}
+              onChangeText={setSenha}
+            />
 
-      {!!aviso && <Text style={styles.aviso}>{aviso}</Text>}
-    </ScrollView>
+            <Botao
+              texto={criando ? "Criar conta" : "Entrar"}
+              onPress={criando ? criarConta : entrar}
+              desativado={ocupado}
+            />
+
+            <Pressable
+              onPress={() => {
+                setCriando((v) => !v);
+                setAviso("");
+              }}
+              disabled={ocupado}
+            >
+              <Text style={estilos.link}>
+                {criando ? "Já tenho conta" : "Criar uma conta"}
+              </Text>
+            </Pressable>
+            {!criando && (
+              <Pressable onPress={esqueciASenha} disabled={ocupado}>
+                <Text style={estilos.linkSuave}>Esqueci a senha</Text>
+              </Pressable>
+            )}
+
+            {!!aviso && <Text style={estilos.aviso}>{aviso}</Text>}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
+const estilos = StyleSheet.create({
+  tela: { flex: 1, backgroundColor: cores.fundo },
+  conteudo: { flexGrow: 1, justifyContent: "center", padding: 24, gap: 28 },
+  marca: { alignItems: "center", gap: 10 },
+  icone: {
+    width: 84,
+    height: 84,
+    borderRadius: 999,
+    backgroundColor: cores.verdeClaro,
+    alignItems: "center",
     justifyContent: "center",
-    padding: 24,
-    gap: 14,
-    backgroundColor: "#ffffff",
   },
-  titulo: { fontSize: 26, fontWeight: "700", color: "#1f2d3d", marginBottom: 8 },
+  nome: { fontFamily: fontes.titulo, fontSize: 32, color: cores.texto },
+  frase: {
+    fontFamily: fontes.corpo,
+    fontSize: 16,
+    color: cores.textoSuave,
+    textAlign: "center",
+  },
+  cartao: {
+    backgroundColor: cores.cartao,
+    borderRadius: 20,
+    padding: 20,
+    gap: 14,
+    ...sombra,
+  },
+  subtitulo: { fontFamily: fontes.titulo, fontSize: 20, color: cores.texto },
   campo: {
     borderWidth: 1,
-    borderColor: "#c9d1d9",
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
+    borderColor: cores.borda,
+    backgroundColor: cores.fundo,
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 13,
+    fontFamily: fontes.corpo,
     fontSize: 16,
-    color: "#1f2d3d",
+    color: cores.texto,
   },
-  link: { color: "#2f4f6f", textAlign: "center", fontSize: 15, paddingVertical: 4 },
-  aviso: { fontSize: 15, color: "#8a3b12" },
+  link: {
+    fontFamily: fontes.corpoNegrito,
+    color: cores.verdeEscuro,
+    textAlign: "center",
+    fontSize: 15,
+    paddingVertical: 4,
+  },
+  linkSuave: {
+    fontFamily: fontes.corpo,
+    color: cores.textoSuave,
+    textAlign: "center",
+    fontSize: 14,
+  },
+  aviso: { fontFamily: fontes.corpo, fontSize: 14, color: cores.aviso, textAlign: "center" },
 });

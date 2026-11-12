@@ -5,7 +5,7 @@ export type Devocional = {
   ordem: number;
   titulo: string;
   versiculoRef: string;
-  versiculoTexto: string;
+  versiculoTexto: string; // pode ser um versículo ou uma passagem maior
   passagemRef: string;
   reflexao: string;
   fraseChave: string;
@@ -22,13 +22,21 @@ export type Semana = {
 };
 
 export type EstadoUsuario = {
+  nome: string;
   ordemAtual: number; // próximo devocional a ser feito (1 a 364)
   ultimaConclusaoData: string | null; // "aaaa-mm-dd" (data local do celular)
   ofensiva: number;
   melhorOfensiva: number;
 };
 
+export type Conclusao = {
+  data: string; // "aaaa-mm-dd"
+  ordem: number;
+  semana: number;
+};
+
 export const ESTADO_INICIAL: EstadoUsuario = {
+  nome: "",
   ordemAtual: 1,
   ultimaConclusaoData: null,
   ofensiva: 0,
